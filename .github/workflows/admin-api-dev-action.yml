@@ -20,7 +20,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Build Docker Image
-              run: docker build --platform linux/amd64 -t amirdev/admin-api:latest -f admin-api-dockerfile .
+              run: docker build --platform linux/amd64 -t amir316/admin-api:latest -f admin-api-dockerfile .
 
             - name: Login to Docker Hub
               uses: docker/login-action@v3
@@ -29,7 +29,7 @@ jobs:
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Push Docker Image to Docker Hub
-              run: docker push amirdev/admin-api:latest
+              run: docker push amir316/admin-api:latest
 
     deploy:
         needs: build
@@ -44,7 +44,7 @@ jobs:
                   port: ${{ secrets.SSH_PORT }}
                   script: |
                       set -e
-                      sed -i "s/image: amirdev\/admin-api:.*$/image: amirdev\/admin-api:${{ github.sha }}/g" /home/ubuntu/docker-compose.yml
+                      sed -i "s/image: amir316\/admin-api:.*$/image: amir316\/admin-api:${{ github.sha }}/g" /home/ubuntu/docker-compose.yml
                       sudo docker-compose pull
                       sudo docker-compose up -d
                       sudo docker ps
