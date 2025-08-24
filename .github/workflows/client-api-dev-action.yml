@@ -1,4 +1,4 @@
-name: Action on Client API
+name: Dev Action on Client API
 
 on:
     push:
