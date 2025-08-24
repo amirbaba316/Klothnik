@@ -1,4 +1,4 @@
-name: Dev Action on Admin API
+name: Dev Action on Admin API.
 
 on:
     push:
