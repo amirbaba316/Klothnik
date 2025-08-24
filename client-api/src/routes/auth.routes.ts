@@ -15,7 +15,7 @@ router.post('/otp', async (req: Request, res: Response) => {
 
 /**
  * @method POST
- * @desc Verify OTP & login
+ * @desc Verify OTP & login.
  */
 router.post('/otp/verify', async (req: Request, res: Response) => {
     const { phoneNumber, otp } = req.body;

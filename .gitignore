@@ -7,12 +7,6 @@ build/
 out/
 
 
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
 # Environment variables
 .env
 .env.local
@@ -20,9 +14,6 @@ pids
 .env.test.local
 .env.production.local
 
-# Coverage
-coverage/
-.nyc_output/
 
 # IDE/editor stuff
 .vscode/
@@ -43,14 +34,8 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 
-# Serverless / deployment
-.serverless/
-.aws-sam/
-
 # Docker
 docker-compose.override.yml
 *.dockerfile
 *.tar
 
-# Misc
-*.tgz
