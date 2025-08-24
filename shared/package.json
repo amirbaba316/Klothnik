@@ -1,0 +1,32 @@
+{
+  "name": "@klothnick/shared",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+      "build": "npx tsc",
+      "watch": "npx tsc -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+      "@types/crypto-js": "^4.1.1",
+      "@types/dotenv": "^8.2.0",
+      "@types/express": "^4.17.15",
+      "@types/file-type": "^10.9.1",
+      "@types/jsonwebtoken": "^9.0.0",
+      "@types/morgan": "^1.9.4",
+      "@types/yup": "^0.32.0",
+      "ts-node-dev": "^2.0.0",
+      "typescript": "^5.2.2"
+  },
+  "dependencies": {
+      "@aws-sdk/client-s3": "^3.758.0",
+      "crypto-js": "^4.1.1",
+      "moment": "^2.29.4",
+      "moment-timezone": "^0.5.40",
+      "mongoose": "^6.8.3",
+      "multer": "^1.4.5-lts.1",
+      "yup": "^1.0.2"
+  }
+}

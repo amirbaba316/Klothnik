@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+      "incremental": true,
+      "target": "ES2019",
+      "module": "commonjs",
+      "declaration": true,
+      "sourceMap": true,
+      "composite": true,
+      "strict": true,
+      "strictNullChecks": false,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "skipLibCheck": true,
+      "noImplicitAny": false,
+      "forceConsistentCasingInFileNames": true,
+      "outDir": "./dist"
+  },
+  "types": [ "node"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist",]
+}

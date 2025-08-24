@@ -1,0 +1,50 @@
+name: Action on Client API
+
+on:
+    push:
+        branches:
+            - dev
+        paths:
+            - client-api/**
+            - shared/**
+            - client-api-dockerfile
+            - .github/workflows/client-api-dev-action.yml
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        container:
+            image: catthehacker/ubuntu:act-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Build Docker Image
+              run: docker build --platform linux/amd64 -t amirdev/client-api:${{ github.sha }} -f client-api-dockerfile .
+
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            - name: Push Docker Image to Docker Hub
+              run: docker push amirdev/client-api:${{ github.sha }}
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Executing remote ssh commands using ssh key
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.KLOTHNIK_HOST }}
+                  username: ${{ secrets.KLOTHNIK_USERNAME }}
+                  key: ${{ secrets.KLOTHNIK_KEY }}
+                  port: ${{ secrets.SSH_PORT }}
+                  script: |
+                      set -e
+                      sed -i "s/image: amirdev\/client-api:.*$/image: amirdev\/client-api:${{ github.sha }}/g" /home/ubuntu/docker-compose.yml
+                      sudo docker-compose pull
+                      sudo docker-compose up -d
+                      sudo docker ps
