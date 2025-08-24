@@ -1,0 +1,59 @@
+# Stage 1: Builder
+FROM node:iron-alpine as builder
+
+# Set Working directory
+WORKDIR /builder-app
+
+# Copy top level package.json and tsconfig.json
+COPY ./package.json .
+COPY ./tsconfig.json .
+
+# Copy shared folder's package.json and tsconfig.json
+COPY ./shared/package.json ./shared/
+COPY ./shared/tsconfig.json ./shared/
+
+# Copy admin-api folder's package.json and tsconfig.json
+COPY ./admin-api/package.json ./admin-api/
+COPY ./admin-api/tsconfig.json ./admin-api/
+
+# Install dependencies
+RUN npm install
+
+COPY ./shared ./shared
+
+COPY ./admin-api ./admin-api
+
+RUN npm run build -w @klothnick/shared
+
+# Build admin-api
+RUN npm run build -w @klothnick/admin-api
+
+# Ensure node_modules directories exist
+RUN mkdir -p /builder-app/node_modules /builder-app/shared/node_modules /builder-app/admin-api/node_modules
+
+# Stage 2: Runner
+FROM node:iron-alpine as runner
+
+# Set Working directory
+WORKDIR /app
+
+# Ensure node_modules directories exist
+RUN mkdir -p /builder-app/node_modules /builder-app/shared/node_modules /builder-app/admin-api/node_modules
+
+# Copy top level package.json and node_modules
+COPY --from=builder /builder-app/package.json .
+COPY --from=builder /builder-app/node_modules ./node_modules
+
+# Copy shared folder's package.json, node_modules, and build folder
+COPY --from=builder /builder-app/shared/package.json ./shared/package.json
+COPY --from=builder /builder-app/shared/build ./shared/build
+
+# Copy admin-api folder's package.json, node_modules, build folder, and assets
+COPY --from=builder /builder-app/admin-api/package.json ./admin-api/package.json
+COPY --from=builder /builder-app/admin-api/node_modules ./admin-api/node_modules
+COPY --from=builder /builder-app/admin-api/build ./admin-api/build
+
+# Command to run the application
+CMD ["npm", "start", "-w", "@klothnick/admin-api"]
+
+# docker build --platform linux/amd64  -t amirdev/admin-api -f admin-api-dockerfile .
