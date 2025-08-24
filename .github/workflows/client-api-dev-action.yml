@@ -20,7 +20,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Build Docker Image
-              run: docker build --platform linux/amd64 -t amirdev/client-api:${{ github.sha }} -f client-api-dockerfile .
+              run: docker build --platform linux/amd64 -t amirdev/client-api:latest -f client-api-dockerfile .
 
             - name: Login to Docker Hub
               uses: docker/login-action@v3
@@ -29,7 +29,7 @@ jobs:
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Push Docker Image to Docker Hub
-              run: docker push amirdev/client-api:${{ github.sha }}
+              run: docker push amirdev/client-api:latest
 
     deploy:
         needs: build
