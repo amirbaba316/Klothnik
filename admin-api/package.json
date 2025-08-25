@@ -1,12 +1,11 @@
 {
     "name": "@klothnick/admin-api",
     "version": "1.0.0",
-    "main": "build/index.js",
-    "types": "build/index.d.ts",
+    "main": "index.js",
     "scripts": {
-      "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+      "dev": "ts-node-dev --respawn --transpile-only app.ts",
       "build": "tsc -b",
-      "start": "node build/index.js"
+      "start": "node build/app.js"
     },
     "dependencies": {
       "express": "^4.18.2",
