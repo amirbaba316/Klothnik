@@ -11,6 +11,7 @@
     "@klothnick/shared": "*",
     "express": "^4.18.2",
     "mongoose": "^7.6.1",
+    "express-async-errors": "^3.1.1",
     "razorpay": "^2.9.6"
   }
 }
