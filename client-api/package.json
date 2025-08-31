@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only app.ts",
-    "build": "tsc -b",
+    "build": "npx tsc -b",
     "start": "node build/app.js"
   },
   "dependencies": {
