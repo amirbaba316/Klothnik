@@ -7,5 +7,6 @@
         "outDir": "./build" // compiled JS will go into client-api/dist
     },
     "include": ["src/**/*", "app.ts"], // only compile files in src/
-    "exclude": ["node_modules", "build"] // ignore node_modules & build output
+    "exclude": ["node_modules", "build"], // ignore node_modules & build output
+    "references": [{ "path": "../shared" }]
 }
