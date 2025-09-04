@@ -47,4 +47,5 @@ jobs:
                       sed -i "s/image: amir316\/admin-api:.*$/image: amir316\/admin-api:latest/g" /home/ubuntu/docker-compose.yml
                       sudo docker-compose pull
                       sudo docker-compose up -d
+                      sudo docker image prune -a -f
                       sudo docker ps
