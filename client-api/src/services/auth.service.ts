@@ -1,7 +1,6 @@
 import { BadRequestError } from '@hyperflake/http-errors';
-import { IUser, User } from '@klothnick/shared/models/user.model';
 import { smsService } from '@klothnick/shared/utils';
-import { OtpVerification } from '@klothnick/shared/models';
+import { OtpVerification, User } from '@klothnick/shared/models';
 import { UserStatusEnum } from '@klothnick/shared/enums';
 
 const OTP_EXPIRATION_MINUTES = parseInt(process.env.OTP_EXPIRATION_MINUTES || '10', 10);
