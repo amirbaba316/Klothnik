@@ -7,10 +7,25 @@
       "watch": "npx tsc -w"
   },
   "exports": {
-    "*": {
-        "production": "./build/*",
-        "development": "./*",
-        "default": "./build/*"
+    "./enums": {
+        "production": "./build/enums/index.js",
+        "development": "./enums/index.ts",
+        "default": "./build/enums/index.js"
+    },
+    "./models": {
+        "production": "./build/models/index.js",
+        "development": "./models/index.ts",
+        "default": "./build/models/index.js"
+    },
+    "./storage-client/*": {
+        "production": "./build/storage-client/*.js",
+        "development": "./storage-client/*.ts",
+        "default": "./build/storage-client/*.js"
+    },
+    "./utils": {
+        "production": "./build/utils/index.js",
+        "development": "./utils/index.ts",
+        "default": "./build/utils/index.js"
     }
   },
   "keywords": [],
