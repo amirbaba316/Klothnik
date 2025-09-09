@@ -29,7 +29,7 @@ export type UserDocument = HydratedDocument<IUser, IUserMethods>;
 
 export interface UserModel extends Model<IUser, {}, IUserMethods> {}
 
-const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
+export const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
     {
         _id: {
             type: String,
@@ -99,7 +99,6 @@ UserSchema.methods.fullName = function () {
 UserSchema.methods.generateAuthToken = async function () {
     const payload = {
         _id: this._id,
-        email: this.email,
         role: this.role,
     };
 
