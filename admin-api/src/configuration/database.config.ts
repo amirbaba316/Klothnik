@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
 
-export const init = async (databaseUri: string) => {
+export const init = async () => {
+    mongoose.set('strictQuery', false);
+
     try {
-        await mongoose.connect(databaseUri);
+        await mongoose.connect(process.env.DATABASE_URI!);
 
         console.log('Connected to Database.');
     } catch (err) {

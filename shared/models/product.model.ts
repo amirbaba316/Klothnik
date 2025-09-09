@@ -127,9 +127,12 @@ const ProductSchema = new Schema<IProduct, ProductModel, IProductMethods>(
                 ref: 'ProductVariant',
             },
         ],
-        reviews: {
-            type: String,
-        },
+        reviews: [
+            {
+                type: String,
+                ref: 'Review',
+            },
+        ],
     },
     {
         timestamps: true,

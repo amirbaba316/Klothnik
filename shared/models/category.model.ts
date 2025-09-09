@@ -1,5 +1,6 @@
 import { HydratedDocument, model, Model, Schema } from 'mongoose';
 import { Counter } from './counter.model';
+import mongoose from 'mongoose';
 
 const collectionName = 'Category';
 
@@ -19,7 +20,7 @@ export type CategoryDocument = HydratedDocument<ICategory, ICategoryMethods>;
 
 export interface CategoryModel extends Model<ICategory, {}, ICategoryMethods> {}
 
-const CategorySchema = new Schema<ICategory, CategoryModel, ICategoryMethods>(
+export const CategorySchema = new Schema<ICategory, CategoryModel, ICategoryMethods>(
     {
         _id: {
             type: String,

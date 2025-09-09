@@ -5,7 +5,7 @@ import express, { Express } from 'express';
 import moment from 'moment';
 import morgan from 'morgan';
 
-import { init as initDatabase } from '../configuration/database.config';
+import * as database from '../configuration/database.config';
 import { init as initRouter } from '../configuration/router.config';
 import { errorHandler } from '../middlewares/error-handler.middleware';
 
@@ -54,7 +54,7 @@ export class AppBootstrap {
     }
 
     initDatabase() {
-        initDatabase(process.env.DATABASE_URI!);
+        database.init();
 
         return this;
     }
@@ -68,6 +68,6 @@ export class AppBootstrap {
     }
 
     static run() {
-        new AppBootstrap().initDatabase().setMiddlewares().setRoutes().setErrorHandler().listen();
+        return new AppBootstrap().setMiddlewares().initDatabase().setRoutes().setErrorHandler().listen();
     }
 }
