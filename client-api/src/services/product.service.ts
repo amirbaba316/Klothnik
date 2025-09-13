@@ -32,6 +32,24 @@ export default class ProductService {
         return Promise.all(results.map((p) => this.addSignedUrls(p)));
     }
 
+    async getAllProducts(params: { query: any }) {
+        const { tag, status } = params.query;
+        const filters: any = {};
+
+        if (tag) filters.tags = tag;
+        if (status) filters.status = status;
+
+        const products = await Product.find(filters).sort({ createdAt: -1 });
+        return Promise.all(products.map((p) => this.addSignedUrls(p)));
+    }
+
+    async getAllProductsById(params: { productId: string }) {
+        const { productId } = params;
+        const product = await Product.findById(productId);
+        if (!product) throw new NotFoundError('Product not found');
+        return this.addSignedUrls(product);
+    }
+
     private async addSignedUrls(product: any) {
         const obj = product.toObject();
 
