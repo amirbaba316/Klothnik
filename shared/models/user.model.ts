@@ -7,14 +7,14 @@ const collectionName = 'User';
 
 export interface IUser extends Document {
     _id: string;
-    firstName: string;
-    lastName: string;
-    phone?: string;
+    firstName?: string;
+    lastName?: string;
+    phone: string;
     image?: string;
-    role: UserRoleEnum;
-    status: UserStatusEnum;
-    isActive: boolean;
-    imageUrl: string;
+    role?: UserRoleEnum;
+    status?: UserStatusEnum;
+    isActive?: boolean;
+    imageUrl?: string;
     lastLogin?: Date;
     addresses?: string[];
     paymentMethods?: string[];
@@ -36,12 +36,10 @@ export const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
         },
         firstName: {
             type: String,
-            required: true,
             trim: true,
         },
         lastName: {
             type: String,
-            required: true,
             trim: true,
         },
         phone: {

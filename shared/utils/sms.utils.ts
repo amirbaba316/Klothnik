@@ -11,10 +11,10 @@ export default class SmsService {
     }
     sendSms = async (params: { phone: string; otp: string }) => {
         const { phone, otp } = params;
-        // if (process.env.NODE_ENV !== 'production') {
-        //     console.log(`Development environment detected. SMS not sent. Phone: ${phone}, OTP: ${otp}`);
-        //     return;
-        // }
+        if (process.env.NODE_ENV !== 'production') {
+            console.log(`Development environment detected. SMS not sent. Phone: ${phone}, OTP: ${otp}`);
+            return;
+        }
 
         const url = `https://2factor.in/API/V1/${this.apiKey}/SMS/${phone}/${otp}`;
 

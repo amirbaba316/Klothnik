@@ -1,7 +1,7 @@
 import mongoose, { Schema, Model, Document } from 'mongoose';
 
 export interface IOtpVerification extends Document {
-    phoneNumber: string;
+    phone: string;
     otp: string;
     expiresAt: Date;
     createdAt: Date;
@@ -22,7 +22,7 @@ export interface OtpVerificationModel extends Model<OtpVerificationDocument> {}
 
 export const otpVerificationSchema = new Schema<OtpVerificationDocument, OtpVerificationModel>(
     {
-        phoneNumber: { type: String, required: true },
+        phone: { type: String, required: true },
         otp: { type: String },
         expiresAt: { type: Date },
     },
