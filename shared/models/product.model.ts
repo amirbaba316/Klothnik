@@ -4,9 +4,53 @@ import { Counter } from './counter.model'; // for generating unique IDs
 const collectionName = 'Product';
 
 export interface IProductOption {
-    name: string;
-    values: string[];
+    fabric: string;
+    pattern: string;
+    neck: string;
+    sleeveLength: string;
+    fit: string;
+    length: string;
+    style: string;
+    material: string;
+    washingInstructions: string;
+    safety: string;
 }
+
+const ProductOptionSchema = new Schema<IProductOption>(
+    {
+        fabric: {
+            type: String,
+        },
+        pattern: {
+            type: String,
+        },
+        neck: {
+            type: String,
+        },
+        sleeveLength: {
+            type: String,
+        },
+        fit: {
+            type: String,
+        },
+        length: {
+            type: String,
+        },
+        style: {
+            type: String,
+        },
+        material: {
+            type: String,
+        },
+        washingInstructions: {
+            type: String,
+        },
+        safety: {
+            type: String,
+        },
+    },
+    { _id: false }
+);
 
 export interface IProduct {
     _id: string;
@@ -26,7 +70,7 @@ export interface IProduct {
     imageUrls: string[];
     status: string;
     tags?: string[];
-    options?: IProductOption[];
+    options?: IProductOption;
     variants?: string[];
     reviews?: string;
 }
@@ -109,18 +153,9 @@ const ProductSchema = new Schema<IProduct, ProductModel, IProductMethods>(
                 type: String,
             },
         ],
-        options: [
-            {
-                name: {
-                    type: String,
-                    required: true,
-                },
-                values: {
-                    type: [String],
-                    required: true,
-                },
-            },
-        ],
+        options: {
+            type: ProductOptionSchema,
+        },
         variants: [
             {
                 type: String,
