@@ -1,6 +1,6 @@
 import { NotFoundError } from '@hyperflake/http-errors';
 import { Product } from '@klothnick/shared/models';
-import { IProduct } from '@klothnick/shared/models';
+import { IProductOption } from '@klothnick/shared/models';
 import { StorageClient } from '@klothnick/shared/storage-client/aws-storage-client';
 
 interface CreateProductParams {
@@ -18,7 +18,7 @@ interface CreateProductParams {
     category: string;
     status?: string;
     tags?: string[];
-    options?: any[];
+    options?: IProductOption;
     variants?: any[];
     reviews?: any[];
     files?: Express.Multer.File[];
