@@ -30,6 +30,8 @@ export default class UserService {
     async updateProfile(params: { user: IUser; firstName?: string; lastName?: string; phone?: string }) {
         const { user, firstName, lastName, phone } = params;
 
+        console.log(params);
+
         const dbUser = await User.findById(user._id);
         if (!dbUser) throw new NotFoundError('User not found');
 

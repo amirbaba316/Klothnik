@@ -10,7 +10,7 @@ const router = express.Router();
  *  @desc   Get logged-in user profile
  *  @access Private
  */
-router.get('/me', [auth], async (req: any, res: any) => {
+router.get('/', [auth], async (req: any, res: any) => {
     const user = await userService.getProfile({ user: req.user });
     res.send(user);
 });
@@ -20,7 +20,7 @@ router.get('/me', [auth], async (req: any, res: any) => {
  *  @desc   Update user profile
  *  @access Private
  */
-router.put('/me', [auth], async (req: any, res: any) => {
+router.put('/', [auth], async (req: any, res: any) => {
     const { firstName, lastName, phone } = req.body; // adjust fields as needed
 
     const updatedUser = await userService.updateProfile({
