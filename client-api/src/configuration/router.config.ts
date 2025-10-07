@@ -13,7 +13,7 @@ export const init = (app: Express) => {
     app.use('/api/v1/auth', authRoutes);
     app.use('/api/v1/cart', cartRoutes);
     app.use('/api/v1/categories', categoryRoutes);
-    app.use('/api/v1/ordes', orderRoutes);
+    app.use('/api/v1/orders', orderRoutes);
     app.use('/api/v1/payment', paymentRoutes);
     app.use('/api/v1/all-products', allProductRoutes);
     app.use('/api/v1/categories/:categoryId/products', productRoutes);
