@@ -6,8 +6,8 @@ const COLLECTION_NAME = 'Payment';
 
 export interface IPayment {
     _id: string;
-    order: Types.ObjectId;
-    user: Types.ObjectId;
+    order: string;
+    user: string;
     amount: number;
     currency: string;
     paymentMethod: PaymentMethodTypeEnum;
@@ -30,12 +30,12 @@ export const PaymentSchema = new Schema<IPayment, PaymentModel, IPaymentMethods>
             type: String,
         },
         order: {
-            type: Schema.Types.ObjectId,
+            type: String,
             ref: 'Order',
             required: true,
         },
         user: {
-            type: Schema.Types.ObjectId,
+            type: String,
             ref: 'User',
             required: true,
         },
