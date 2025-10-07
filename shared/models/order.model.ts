@@ -123,7 +123,6 @@ OrderSchema.pre('save', async function (next) {
     if (process.env.MODE !== 'migration') {
         if (this.isNew) {
             this._id = await generateUniqueId();
-            this.orderNumber = `ORD-${this._id}`;
         }
     }
     next();
