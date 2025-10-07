@@ -11,7 +11,7 @@ const paymentService = new PaymentService();
  *  @access Private
  */
 router.post('/create-order', [auth], async (req: any, res: any) => {
-    const { amount, currency, orderId, paymentMethod } = req.body;
+    const { orderId, paymentMethod } = req.body;
     const data = await paymentService.createRazorpayOrder({
         user: req.user,
         orderId,

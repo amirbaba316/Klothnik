@@ -1,5 +1,5 @@
 import { HydratedDocument, model, Model, Schema } from 'mongoose';
-import { OrderStatusEnum } from '../enums';
+import { OrderStatusEnum, PaymentMethodTypeEnum } from '../enums';
 import { Counter } from './counter.model';
 
 const collectionName = 'Order';
@@ -16,14 +16,12 @@ export interface IOrder extends Document {
     user: string;
     orderNumber: string;
     items: IOrderItem[];
-    subtotal: number;
     shippingFee: number;
     tax: number;
     discount?: number;
     total: number;
     shippingAddress: string;
-    billingAddress?: string;
-    paymentMethod: string;
+    paymentMethod: PaymentMethodTypeEnum;
     razorpayOrderId?: string;
     status: OrderStatusEnum;
     trackingNumber?: string;
@@ -74,19 +72,12 @@ const OrderSchema = new Schema<IOrder, OrderModel, IOrderMethods>(
                 },
             },
         ],
-        subtotal: {
-            type: Number,
-            required: true,
-            min: 0,
-        },
         shippingFee: {
             type: Number,
-            required: true,
             min: 0,
         },
         tax: {
             type: Number,
-            required: true,
             min: 0,
         },
         discount: {
@@ -103,10 +94,6 @@ const OrderSchema = new Schema<IOrder, OrderModel, IOrderMethods>(
             ref: 'Address',
             required: true,
         },
-        billingAddress: {
-            type: String,
-            ref: 'Address',
-        },
         razorpayOrderId: {
             type: String,
             trim: true,
@@ -114,8 +101,7 @@ const OrderSchema = new Schema<IOrder, OrderModel, IOrderMethods>(
 
         paymentMethod: {
             type: String,
-            ref: 'PaymentMethod',
-            required: true,
+            enum: Object.values(PaymentMethodTypeEnum),
         },
         status: {
             type: String,

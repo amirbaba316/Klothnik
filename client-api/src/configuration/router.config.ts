@@ -7,12 +7,14 @@ import productRoutes from '../routes/product.routes';
 import allProductRoutes from '../routes/all-product.routes';
 import userRoutes from '../routes/user.routes';
 import reviewRoutes from '../routes/review.routes';
+import paymentRoutes from '../routes/payment.routes';
 
 export const init = (app: Express) => {
     app.use('/api/v1/auth', authRoutes);
     app.use('/api/v1/cart', cartRoutes);
     app.use('/api/v1/categories', categoryRoutes);
     app.use('/api/v1/ordes', orderRoutes);
+    app.use('/api/v1/payment', paymentRoutes);
     app.use('/api/v1/all-products', allProductRoutes);
     app.use('/api/v1/categories/:categoryId/products', productRoutes);
     app.use('/api/v1/user', userRoutes);
