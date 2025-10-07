@@ -33,6 +33,8 @@ export default class PaymentService {
         await order.save();
 
         return {
+            bookingId: order._id,
+            razorpayKey: process.env.RAZORPAY_KEY_ID!,
             razorpayOrderId: razorpayOrder.id,
             amount: razorpayOrder.amount,
             currency: razorpayOrder.currency,
