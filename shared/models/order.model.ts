@@ -14,7 +14,6 @@ export interface IOrderItem {
 export interface IOrder extends Document {
     _id: string;
     user: string;
-    orderNumber: string;
     items: IOrderItem[];
     shippingFee: number;
     tax: number;
@@ -43,11 +42,6 @@ const OrderSchema = new Schema<IOrder, OrderModel, IOrderMethods>(
             type: String,
             ref: 'User',
             required: true,
-        },
-        orderNumber: {
-            type: String,
-            required: true,
-            unique: true,
         },
         items: [
             {
