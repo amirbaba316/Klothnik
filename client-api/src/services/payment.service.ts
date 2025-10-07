@@ -88,14 +88,11 @@ export default class PaymentService {
                         amount: order.total,
                         currency: 'INR',
                         paymentMethod: PaymentMethodTypeEnum.RAZORPAY,
-                        transactionId: razorpayPaymentId,
                         status: PaymentStatusEnum.SUCCESS,
                         paymentDate: new Date(),
-                        gatewayResponse: {
-                            razorpayOrderId,
-                            razorpayPaymentId,
-                            razorpaySignature,
-                        },
+                        razorpayOrderId,
+                        razorpayPaymentId,
+                        razorpaySignature,
                     },
                 ],
                 { session }
