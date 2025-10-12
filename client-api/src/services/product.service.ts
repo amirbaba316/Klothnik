@@ -18,7 +18,7 @@ export default class ProductService {
 
     async getById(params: { productId: string }) {
         const { productId } = params;
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId).populate({ path: 'variants' });
         if (!product) throw new NotFoundError('Product not found');
         return this.addSignedUrls(product);
     }
@@ -28,7 +28,7 @@ export default class ProductService {
         const regex = new RegExp(query, 'i');
         const results = await Product.find({
             $or: [{ name: regex }, { description: regex }],
-        });
+        }).populate({ path: 'variants' });
         return Promise.all(results.map((p) => this.addSignedUrls(p)));
     }
 
@@ -45,7 +45,7 @@ export default class ProductService {
 
     async getAllProductsById(params: { productId: string }) {
         const { productId } = params;
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId).populate({ path: 'variants' });
         if (!product) throw new NotFoundError('Product not found');
         return this.addSignedUrls(product);
     }

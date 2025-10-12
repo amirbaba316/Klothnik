@@ -11,7 +11,7 @@ export default class ProductVariantService {
     async getById(params: { user: IUser; variantId: string }): Promise<IProductVariant> {
         const { variantId } = params;
 
-        const variant = await ProductVariant.findById(variantId).lean();
+        const variant = await ProductVariant.findById(variantId).populate({ path: 'variants' }).lean();
 
         if (!variant) throw new NotFoundError('Product variant not found');
 
