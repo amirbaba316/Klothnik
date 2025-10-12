@@ -39,7 +39,7 @@ export default class ProductService {
         if (tag) filters.tags = tag;
         if (status) filters.status = status;
 
-        const products = await Product.find(filters).sort({ createdAt: -1 });
+        const products = await Product.find(filters).populate({ path: 'variants' }).sort({ createdAt: -1 });
         return Promise.all(products.map((p) => this.addSignedUrls(p)));
     }
 
