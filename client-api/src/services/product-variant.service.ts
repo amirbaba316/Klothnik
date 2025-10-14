@@ -8,10 +8,12 @@ export default class ProductVariantService {
         return await ProductVariant.find({ productId }).sort({ createdAt: -1 }).lean();
     }
 
-    async getById(params: { user: IUser; variantId: string }): Promise<IProductVariant> {
-        const { variantId } = params;
+    async getById(params: { size: string; color: string; user: IUser; variantId: string }): Promise<IProductVariant> {
+        const { size, color, variantId } = params;
 
-        const variant = await ProductVariant.findById(variantId).populate({ path: 'variants' }).lean();
+        const variant = await ProductVariant.findOne({ _id: variantId, size: size, color: color })
+            .populate({ path: 'productId' })
+            .lean();
 
         if (!variant) throw new NotFoundError('Product variant not found');
 

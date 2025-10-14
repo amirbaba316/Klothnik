@@ -6,15 +6,21 @@ const router = Router();
 const productVariantService = new ProductVariantService();
 
 // GET all variants of a product
-router.get('/:productId', [auth], (req: any, res: any) => {
+router.get('/', [auth], (req: any, res: any) => {
     const variants = productVariantService.getVariantsByProductId({ user: req.user, productId: req.params.productId });
 
     res.send(variants);
 });
 
 // GET single variant by ID
-router.get('/variant/:variantId', [auth], (req: any, res: any) => {
-    const variant = productVariantService.getById({ user: req.user, variantId: req.params.variantId });
+router.get('/:variantId', [auth], (req: any, res: any) => {
+    const { size, color } = req.query;
+    const variant = productVariantService.getById({
+        size: size,
+        color: color,
+        user: req.user,
+        variantId: req.params.variantId,
+    });
     res.send(variant);
 });
 
