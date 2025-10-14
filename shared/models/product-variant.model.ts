@@ -14,10 +14,8 @@ export interface IProductVariant {
     barcode?: string;
     quantity: number;
     weight?: number;
-    options: {
-        name: string;
-        value: string;
-    }[];
+    size: string;
+    color: string;
     image?: string;
     status: ProductVariantStatusEnum;
 }
@@ -68,12 +66,12 @@ export const ProductVariantSchema = new Schema<IProductVariant, ProductVariantMo
             type: Number,
             min: 0,
         },
-        options: [
-            {
-                name: { type: String, required: true },
-                value: { type: String, required: true },
-            },
-        ],
+        size: {
+            type: String,
+        },
+        color: {
+            type: String,
+        },
         image: {
             type: String,
         },
