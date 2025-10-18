@@ -5,7 +5,13 @@ export default class ProductVariantService {
     async getVariantsByProductId(params: { user: IUser; productId: string }): Promise<IProductVariant[]> {
         const { productId } = params;
 
-        return await ProductVariant.find({ productId }).sort({ createdAt: -1 }).lean();
+        console.log(productId);
+
+        const productVarirants = await ProductVariant.find({ productId }).sort({ createdAt: -1 }).lean();
+
+        console.log(productVarirants);
+
+        return productVarirants;
     }
 
     async getById(params: { size: string; color: string; user: IUser; variantId: string }): Promise<IProductVariant> {
