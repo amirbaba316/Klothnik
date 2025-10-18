@@ -61,7 +61,7 @@ export default class ProductService {
                 const key = `products/${name}-${Date.now()}.${ext}`;
 
                 await this.storageClient.upload({
-                    bucket: process.env.AWS_BUCKET!,
+                    bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                     key,
                     body: file.buffer,
                     contentType: file.mimetype,
@@ -106,7 +106,7 @@ export default class ProductService {
                     product.imageUrls = await Promise.all(
                         product.images.map((key: string) =>
                             this.storageClient.getSignedUrlForGetObject({
-                                bucket: process.env.AWS_BUCKET!,
+                                bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                                 key,
                             })
                         )
@@ -130,7 +130,7 @@ export default class ProductService {
             productObj.imageUrls = await Promise.all(
                 productObj.images.map((key: string) =>
                     this.storageClient.getSignedUrlForGetObject({
-                        bucket: process.env.AWS_BUCKET!,
+                        bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                         key,
                     })
                 )
@@ -170,10 +170,10 @@ export default class ProductService {
             imageKeys = [];
             for (const file of files) {
                 const ext = file.originalname.split('.').pop();
-                const key = `products/${name || product.name}-${Date.now()}.${ext}`;
+                const key = `products/${name}-${Date.now()}.${ext}`;
 
                 await this.storageClient.upload({
-                    bucket: process.env.AWS_BUCKET!,
+                    bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                     key,
                     body: file.buffer,
                     contentType: file.mimetype,

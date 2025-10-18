@@ -16,7 +16,7 @@ export default class CategoryService {
                 const obj = cat.toObject();
                 if (obj.image) {
                     obj.imageUrl = await this.storageClient.getSignedUrlForGetObject({
-                        bucket: process.env.AWS_BUCKET!,
+                        bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                         key: obj.image,
                     });
                 }
@@ -37,7 +37,7 @@ export default class CategoryService {
         const obj = category.toObject();
         if (obj.image) {
             obj.imageUrl = await this.storageClient.getSignedUrlForGetObject({
-                bucket: process.env.AWS_BUCKET!,
+                bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                 key: obj.image,
             });
         }

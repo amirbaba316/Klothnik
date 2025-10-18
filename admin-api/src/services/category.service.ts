@@ -21,7 +21,7 @@ export default class CategoryService {
             const key = `categories/${name}-${Date.now()}.${ext}`;
 
             await this.storageClient.upload({
-                bucket: process.env.AWS_BUCKET!,
+                bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                 key,
                 body: file.buffer,
                 contentType: file.mimetype,
@@ -86,10 +86,10 @@ export default class CategoryService {
 
         if (file) {
             const ext = file.originalname.split('.').pop();
-            const key = `categories/${updates.name || 'category'}-${Date.now()}.${ext}`;
+            const key = `categories/${updates.name}-${Date.now()}.${ext}`;
 
             await this.storageClient.upload({
-                bucket: process.env.AWS_BUCKET!,
+                bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                 key,
                 body: file.buffer,
                 contentType: file.mimetype,
@@ -119,7 +119,7 @@ export default class CategoryService {
 
     private async getSignedUrl(key: string): Promise<string> {
         return this.storageClient.getSignedUrlForGetObject({
-            bucket: process.env.AWS_BUCKET!,
+            bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
             key,
         });
     }

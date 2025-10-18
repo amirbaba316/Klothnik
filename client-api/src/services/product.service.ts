@@ -57,7 +57,7 @@ export default class ProductService {
             obj.imageUrls = await Promise.all(
                 obj.images.map((key: string) =>
                     this.storageClient.getSignedUrlForGetObject({
-                        bucket: process.env.AWS_BUCKET!,
+                        bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                         key,
                     })
                 )

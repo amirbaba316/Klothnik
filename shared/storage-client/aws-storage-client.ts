@@ -9,6 +9,7 @@ export class StorageClient {
         body: Buffer | ReadableStream | string;
         contentType: string;
     }): Promise<void> {
+        console.log(params);
         const command = new PutObjectCommand({
             Bucket: params.bucket,
             Key: params.key,

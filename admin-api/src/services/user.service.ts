@@ -35,10 +35,10 @@ export default class UserService {
 
         if (file) {
             const ext = file.originalname.split('.').pop();
-            imageKey = `users/username-${Date.now()}.${ext}`;
+            imageKey = `users/${userId}-${Date.now()}.${ext}`;
 
             await this.storageClient.upload({
-                bucket: process.env.AWS_BUCKET!,
+                bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                 key: imageKey,
                 body: file.buffer,
                 contentType: file.mimetype,
@@ -69,7 +69,7 @@ export default class UserService {
     private async appendSignedUrl(user: any) {
         if (user.image) {
             user.imageUrl = await this.storageClient.getSignedUrlForGetObject({
-                bucket: process.env.AWS_BUCKET!,
+                bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
                 key: user.image,
             });
         }
