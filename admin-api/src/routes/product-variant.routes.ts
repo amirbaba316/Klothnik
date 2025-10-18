@@ -5,8 +5,20 @@ const router = express.Router();
 const productVariantService = new ProductVariantService();
 
 router.post('/', async (req, res) => {
-    const { productId, sku, price, compareAtPrice, costPerItem, barcode, quantity, weight, options, image, status } =
-        req.body;
+    const {
+        productId,
+        sku,
+        price,
+        compareAtPrice,
+        costPerItem,
+        barcode,
+        quantity,
+        weight,
+        size,
+        color,
+        image,
+        status,
+    } = req.body;
 
     const variant = await productVariantService.create({
         productId,
@@ -17,7 +29,8 @@ router.post('/', async (req, res) => {
         barcode,
         quantity,
         weight,
-        options,
+        size,
+        color,
         image,
         status,
     });
@@ -36,8 +49,20 @@ router.get('/:variantId', async (req, res) => {
 });
 
 router.put('/:variantId', async (req, res) => {
-    const { productId, sku, price, compareAtPrice, costPerItem, barcode, quantity, weight, options, image, status } =
-        req.body;
+    const {
+        productId,
+        sku,
+        price,
+        compareAtPrice,
+        costPerItem,
+        barcode,
+        quantity,
+        weight,
+        size,
+        color,
+        image,
+        status,
+    } = req.body;
 
     const updated = await productVariantService.update({
         variantId: req.params.variantId,
@@ -50,7 +75,8 @@ router.put('/:variantId', async (req, res) => {
             barcode,
             quantity,
             weight,
-            options,
+            size,
+            color,
             image,
             status,
         },
