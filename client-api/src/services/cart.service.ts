@@ -7,7 +7,9 @@ export default class CartService {
      */
     async getCart(params: { user: IUser }) {
         const { user } = params;
-        const cart = await Cart.findOne({ user: user._id }).populate('items.product items.variant');
+        const cart = await Cart.findOne({ user: user._id })
+            .populate({ path: 'items.product', select: 'name price images status' })
+            .populate({ path: 'items.variant', select: 'sku price size color status' });
         if (!cart) return { items: [] };
         return cart.toObject();
     }

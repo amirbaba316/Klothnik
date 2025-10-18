@@ -12,13 +12,13 @@ export default class ProductService {
         if (tag) filters.tags = tag;
         if (status) filters.status = status;
 
-        const products = await Product.find(filters).sort({ createdAt: -1 });
+        const products = await Product.find(filters).populate('variants').sort({ createdAt: -1 });
         return Promise.all(products.map((p) => this.addSignedUrls(p)));
     }
 
     async getById(params: { productId: string }) {
         const { productId } = params;
-        const product = await Product.findById(productId).populate({ path: 'variants' });
+        const product = await Product.findById(productId).populate('variants');
         if (!product) throw new NotFoundError('Product not found');
         return this.addSignedUrls(product);
     }
