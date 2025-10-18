@@ -17,9 +17,16 @@ export default class ProductVariantService {
     async getById(params: { size: string; color: string; user: IUser; variantId: string }): Promise<IProductVariant> {
         const { size, color, variantId } = params;
 
-        const variant = await ProductVariant.findOne({ _id: variantId, size: size, color: color })
-            .populate({ path: 'productId' })
-            .lean();
+        const query = { _id: variantId };
+
+        if (size) {
+            query['size'] = size;
+        }
+        if (color) {
+            query['color'] = color;
+        }
+
+        const variant = await ProductVariant.findOne(query).populate({ path: 'productId' }).lean();
 
         if (!variant) throw new NotFoundError('Product variant not found');
 
