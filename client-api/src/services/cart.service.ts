@@ -7,9 +7,10 @@ export default class CartService {
      */
     async getCart(params: { user: IUser }) {
         const { user } = params;
-        const cart = await Cart.findOne({ user: user._id })
-            .populate({ path: 'items.product', select: 'name price images status' })
-            .populate({ path: 'items.variant', select: 'sku price size color status' });
+        const cart = await Cart.findOne({ user: user._id }).populate([
+            { path: 'items.product', select: 'name price images status' },
+            { path: 'items.variant', select: 'sku price size color status' },
+        ]);
         if (!cart) return { items: [] };
         return cart.toObject();
     }
@@ -29,7 +30,11 @@ export default class CartService {
             return cart.toObject();
         }
 
-        const existingItem = cart.items.find((item) => item.product === product && item.variant === variant);
+        const existingItem = cart.items.find(
+            (item) =>
+                item.product?.toString() === product.toString() &&
+                item.variant?.toString() === (variant ? variant.toString() : undefined)
+        );
 
         if (existingItem) {
             existingItem.quantity += quantity;
