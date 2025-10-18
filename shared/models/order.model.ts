@@ -11,6 +11,14 @@ export interface IOrderItem {
     price: number;
 }
 
+export interface IOrderTimeline {
+    orderPlaced: Date;
+    orderConfirmed: Date;
+    processing: Date;
+    shipped: Date;
+    outForDelivery: Date;
+}
+
 export interface IOrder extends Document {
     _id: string;
     user: string;
@@ -25,6 +33,7 @@ export interface IOrder extends Document {
     status: OrderStatusEnum;
     trackingNumber?: string;
     notes?: string;
+    orderTimeline?: IOrderTimeline;
 }
 
 export interface IOrderMethods {}
@@ -107,6 +116,13 @@ const OrderSchema = new Schema<IOrder, OrderModel, IOrderMethods>(
         },
         notes: {
             type: String,
+        },
+        orderTimeline: {
+            orderPlaced: { type: Date, default: Date.now() },
+            orderConfirmed: { type: Date, default: null },
+            processing: { type: Date, default: null },
+            shipped: { type: Date, default: null },
+            outForDelivery: { type: Date, default: null },
         },
     },
     {

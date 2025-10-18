@@ -30,7 +30,7 @@ export default class CategoryService {
      */
     async getById(params: { categoryId: string }) {
         const { categoryId } = params;
-        const category = await Category.findById(categoryId);
+        const category = await Category.findById(categoryId).populate({ path: 'variants' });
 
         if (!category) throw new NotFoundError('Category not found');
 
