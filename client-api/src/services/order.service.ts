@@ -55,7 +55,7 @@ export default class OrderService {
     }
 
     /**
-     *  @desc   Get all orders of logged-in user
+     *  @desc   Get all orders of logged-in user.
      */
     async getAllByUser(params: { user: IUser }) {
         const { user } = params;
