@@ -3,7 +3,7 @@ import { IUser, Order } from '@klothnick/shared/models';
 
 export default class OrderService {
     /**
-     *  @desc   Create an order
+     *  @desc   Create an order.
      */
     async create(params: {
         user: IUser;
