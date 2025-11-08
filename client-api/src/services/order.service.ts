@@ -60,7 +60,9 @@ export default class OrderService {
     async getAllByUser(params: { user: IUser }) {
         const { user } = params;
 
-        return await Order.find({ user: user._id }).populate('items.product').sort({ createdAt: -1 });
+        return await Order.find({ user: user._id })
+            .populate([{ path: 'items.product' }, { path: 'items.variant' }])
+            .sort({ createdAt: -1 });
     }
 
     /**
