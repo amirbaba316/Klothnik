@@ -5,7 +5,7 @@ const collectionName = 'Cart';
 
 export interface ICartItem {
     product: string;
-    variant?: string;
+    variant: string;
     quantity: number;
 }
 
@@ -43,6 +43,7 @@ const CartSchema = new Schema<ICart, CartModel, ICartMethods>(
                 variant: {
                     type: String,
                     ref: 'ProductVariant',
+                    required: true,
                 },
                 quantity: {
                     type: Number,

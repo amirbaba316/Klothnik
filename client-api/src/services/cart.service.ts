@@ -37,7 +37,7 @@ export default class CartService {
         );
 
         if (existingItem) {
-            existingItem.quantity += quantity;
+            existingItem.quantity += Number(quantity);
         } else {
             cart.items.push({ product, variant, quantity });
         }
