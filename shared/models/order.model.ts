@@ -4,6 +4,12 @@ import { Counter } from './counter.model';
 
 const collectionName = 'Order';
 
+export interface IOrderTimeLineStep {
+    date: Date;
+    message: string;
+    status: number;
+}
+
 export interface IOrderItem {
     product: string;
     variant: string;
@@ -12,11 +18,11 @@ export interface IOrderItem {
 }
 
 export interface IOrderTimeline {
-    orderPlaced: Date;
-    orderConfirmed: Date;
-    processing: Date;
-    shipped: Date;
-    outForDelivery: Date;
+    orderPlaced: IOrderTimeLineStep;
+    orderConfirmed: IOrderTimeLineStep;
+    processing: IOrderTimeLineStep;
+    shipped: IOrderTimeLineStep;
+    outForDelivery: IOrderTimeLineStep;
 }
 
 export interface IOrder extends Document {
