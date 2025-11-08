@@ -6,7 +6,7 @@ const collectionName = 'Order';
 
 export interface IOrderItem {
     product: string;
-    variant?: string;
+    variant: string;
     quantity: number;
     price: number;
 }
@@ -62,6 +62,7 @@ const OrderSchema = new Schema<IOrder, OrderModel, IOrderMethods>(
                 variant: {
                     type: String,
                     ref: 'ProductVariant',
+                    required: true,
                 },
                 quantity: {
                     type: Number,

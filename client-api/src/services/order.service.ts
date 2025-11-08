@@ -9,7 +9,7 @@ export default class OrderService {
         user: IUser;
         items: {
             product: string;
-            variant?: string;
+            variant: string;
             quantity: number;
             price: number;
         }[];
