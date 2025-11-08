@@ -8,6 +8,7 @@ export interface IOrderTimeLineStep {
     date: Date;
     message: string;
     status: number;
+    flag: boolean;
 }
 
 export interface IOrderItem {
@@ -129,26 +130,31 @@ const OrderSchema = new Schema<IOrder, OrderModel, IOrderMethods>(
                 date: { type: Date, default: Date.now() },
                 message: 'Your Order has been Placed',
                 status: OrderStatusEnum.PLACED,
+                flag: true,
             },
             orderConfirmed: {
                 date: { type: Date, default: null },
                 message: 'Your Order has been Confirmed',
                 status: OrderStatusEnum.CONFIRMED,
+                flag: false,
             },
             processing: {
                 date: { type: Date, default: null },
                 message: 'Your Order Is Processing',
                 status: OrderStatusEnum.PROCESSING,
+                flag: false,
             },
             shipped: {
                 date: { type: Date, default: null },
                 message: 'Your Order has been Shipped',
                 status: OrderStatusEnum.SHIPPED,
+                flag: false,
             },
             outForDelivery: {
                 date: { type: Date, default: null },
                 message: 'Your Order is Out for Delivery',
                 status: OrderStatusEnum.OUT_FOR_DELIVERY,
+                flag: false,
             },
         },
     },
