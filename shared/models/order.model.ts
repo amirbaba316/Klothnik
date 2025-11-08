@@ -125,11 +125,31 @@ const OrderSchema = new Schema<IOrder, OrderModel, IOrderMethods>(
             type: String,
         },
         orderTimeline: {
-            orderPlaced: { type: Date, default: Date.now() },
-            orderConfirmed: { type: Date, default: null },
-            processing: { type: Date, default: null },
-            shipped: { type: Date, default: null },
-            outForDelivery: { type: Date, default: null },
+            orderPlaced: {
+                date: { type: Date, default: Date.now() },
+                message: 'Your Order has been Placed',
+                status: OrderStatusEnum.PLACED,
+            },
+            orderConfirmed: {
+                date: { type: Date, default: null },
+                message: 'Your Order has been Confirmed',
+                status: OrderStatusEnum.CONFIRMED,
+            },
+            processing: {
+                date: { type: Date, default: null },
+                message: 'Your Order Is Processing',
+                status: OrderStatusEnum.PROCESSING,
+            },
+            shipped: {
+                date: { type: Date, default: null },
+                message: 'Your Order has been Shipped',
+                status: OrderStatusEnum.SHIPPED,
+            },
+            outForDelivery: {
+                date: { type: Date, default: null },
+                message: 'Your Order is Out for Delivery',
+                status: OrderStatusEnum.OUT_FOR_DELIVERY,
+            },
         },
     },
     {
