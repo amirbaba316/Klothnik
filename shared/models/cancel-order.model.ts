@@ -1,6 +1,7 @@
 import { HydratedDocument, model, Model, Schema } from 'mongoose';
 import { Counter } from './counter.model';
 import { IOrder, IOrderItem } from './order.model';
+import { OrderStatusEnum } from '../enums';
 
 const collectionName = 'CancelOrder';
 
@@ -9,6 +10,7 @@ export interface ICancelOrder /* extends Document (provided by mongoose typings)
     user: string; // String _id of User
     order: string | IOrder;
     reason: string;
+    orderStatus: OrderStatusEnum
 }
 
 export interface ICancelOrderMethods {}
@@ -36,6 +38,10 @@ const CancelOrderSchema = new Schema<ICancelOrder, CancelOrderModel, ICancelOrde
             type: String,
             required: true,
         },
+        orderStatus:  {
+            type: String,
+            enum: Object.values(OrderStatusEnum),
+        },,
     },
     {
         timestamps: true,
