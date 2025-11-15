@@ -1,5 +1,6 @@
 import express from 'express';
 import ProductService from '../services/product.service';
+import auth from '../middlewares/auth';
 const productService = new ProductService();
 const router = express.Router();
 
@@ -8,7 +9,7 @@ const router = express.Router();
  *  @desc   Get all products (optionally filterable)
  *  @access Public (or token-authenticated if needed)
  */
-router.get('/', async (req, res) => {
+router.get('/', [auth], async (req, res) => {
     const products = await productService.getAll({ query: req.query });
     res.send(products);
 });
@@ -18,7 +19,7 @@ router.get('/', async (req, res) => {
  *  @desc   Get product by ID
  *  @access Public
  */
-router.get('/:productId', async (req, res) => {
+router.get('/:productId', [auth], async (req, res) => {
     const product = await productService.getById({ productId: req.params.productId });
     res.send(product);
 });
@@ -28,8 +29,8 @@ router.get('/:productId', async (req, res) => {
  *  @desc   Search product by name or description
  *  @access Public
  */
-router.get('/search', async (req, res) => {
-    const products = await productService.search({ query: req.query.q as string });
+router.get('/search', [auth], async (req, res) => {
+    const products = await productService.searchProduct({ searchQuery: req.query.q as string, user: req.user });
     res.send(products);
 });
 

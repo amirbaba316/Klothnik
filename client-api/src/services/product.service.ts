@@ -1,5 +1,5 @@
 import { NotFoundError } from '@hyperflake/http-errors';
-import { Product } from '@klothnick/shared/models';
+import { IUser, Product } from '@klothnick/shared/models';
 import { StorageClient } from '@klothnick/shared/storage-client/aws-storage-client'; // Update the path if needed
 
 export default class ProductService {
@@ -23,9 +23,9 @@ export default class ProductService {
         return this.addSignedUrls(product);
     }
 
-    async search(params: { query: string }) {
-        const { query } = params;
-        const regex = new RegExp(query, 'i');
+    async searchProduct(params: { searchQuery: string; user: IUser }) {
+        const { searchQuery } = params;
+        const regex = new RegExp(searchQuery, 'i');
         const results = await Product.find({
             $or: [{ name: regex }, { description: regex }],
         }).populate({ path: 'variants' });
