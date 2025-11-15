@@ -69,7 +69,7 @@ export default class PaymentService {
 
             // Ensure the payment ID wasn't already used
             const existing = await Payment.findOne({
-                transactionId: razorpayPaymentId,
+                razorpayPaymentId,
             }).session(session);
 
             if (existing) throw new BadRequestError('Duplicate payment');
@@ -100,6 +100,59 @@ export default class PaymentService {
 
             // Mark order as paid
             order.status = OrderStatusEnum.PAID;
+            await order.save({ session });
+
+            await session.commitTransaction();
+            return payment.toObject();
+        } catch (err) {
+            await session.abortTransaction();
+            throw err;
+        } finally {
+            session.endSession();
+        }
+    }
+
+    async createCashOnDeliveryPayment(params: { user: IUser; orderId: string }) {
+        const { user, orderId } = params;
+
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
+        try {
+            const order = await Order.findOne({ _id: orderId, user: user._id }).session(session);
+            if (!order) throw new NotFoundError('Order not found or access denied');
+
+            // Check if order already has a payment
+            const existingPayment = await Payment.findOne({ order: order._id }).session(session);
+            if (existingPayment) {
+                throw new BadRequestError('Payment already exists for this order');
+            }
+
+            // Check if order is already paid
+            if (order.status === OrderStatusEnum.PAID) {
+                throw new BadRequestError('Order is already paid');
+            }
+
+            // Create COD payment document with PENDING status
+            const [payment] = await Payment.create(
+                [
+                    {
+                        order: order._id,
+                        user: user._id,
+                        amount: order.total,
+                        currency: 'INR',
+                        paymentMethod: PaymentMethodTypeEnum.COD,
+                        status: PaymentStatusEnum.PENDING,
+                        razorpayOrderId: `COD_${orderId}_${Date.now()}`, // Placeholder for required field
+                        paymentDate: new Date(),
+                    },
+                ],
+                { session }
+            );
+
+            // Update order status to indicate COD is selected
+            // You might want to add a specific status like CONFIRMED or keep it as is
+            order.status = OrderStatusEnum.CONFIRMED; // or whatever status makes sense
             await order.save({ session });
 
             await session.commitTransaction();

@@ -47,6 +47,16 @@ router.get('/', [auth], async (req: any, res: any) => {
 });
 
 /**
+ *  @method GET
+ *  @desc   Get cancelled orders of logged-in user
+ *  @access Private
+ */
+router.get('/cancelled', [auth], async (req: any, res: any) => {
+    const orders = await orderService.getAllCancelledOrdersByUser({ user: req.user });
+    res.send(orders);
+});
+
+/**
  *  @method DELETE
  *  @desc   Delete orders of logged-in user
  *  @access Private

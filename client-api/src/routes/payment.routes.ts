@@ -38,6 +38,20 @@ router.post('/confirm', [auth], async (req: any, res: any) => {
 });
 
 /**
+ *  @method POST
+ *  @desc   Create Cash on Delivery order
+ *  @access Private
+ */
+router.post('/cash-on-delivery', [auth], async (req: any, res: any) => {
+    const { orderId } = req.body;
+    const payment = await paymentService.createCashOnDeliveryPayment({
+        user: req.user,
+        orderId,
+    });
+    res.send(payment);
+});
+
+/**
  *  @method GET
  *  @desc   Get all payments of a user
  *  @access Private

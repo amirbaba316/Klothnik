@@ -61,6 +61,17 @@ export default class OrderService {
     async getAllByUser(params: { user: IUser }) {
         const { user } = params;
 
+        return await Order.find({ user: user._id, status: { $ne: OrderStatusEnum.CANCELLED } })
+            .populate([{ path: 'items.product' }, { path: 'items.variant' }])
+            .sort({ createdAt: -1 });
+    }
+
+    /**
+     *  @desc   Get all cancelled orders of logged-in user.
+     */
+    async getAllCancelledOrdersByUser(params: { user: IUser }) {
+        const { user } = params;
+
         return await Order.find({ user: user._id, status: OrderStatusEnum.CANCELLED })
             .populate([{ path: 'items.product' }, { path: 'items.variant' }])
             .sort({ createdAt: -1 });
