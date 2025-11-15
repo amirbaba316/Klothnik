@@ -10,7 +10,7 @@ export interface ICancelOrder /* extends Document (provided by mongoose typings)
     user: string; // String _id of User
     order: string | IOrder;
     reason: string;
-    orderStatus: OrderStatusEnum
+    orderStatus: OrderStatusEnum;
 }
 
 export interface ICancelOrderMethods {}
@@ -38,10 +38,10 @@ const CancelOrderSchema = new Schema<ICancelOrder, CancelOrderModel, ICancelOrde
             type: String,
             required: true,
         },
-        orderStatus:  {
+        orderStatus: {
             type: String,
             enum: Object.values(OrderStatusEnum),
-        },,
+        },
     },
     {
         timestamps: true,
