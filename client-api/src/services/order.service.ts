@@ -103,6 +103,10 @@ export default class OrderService {
 
         if (!order) throw new NotFoundError('Order not found');
 
+        order.status = OrderStatusEnum.CANCELLED;
+
+        await order.save();
+
         await CancelOrder.create({
             user: user._id,
             order: orderId,
