@@ -33,4 +33,22 @@ router.put('/', [auth], async (req: any, res: any) => {
     res.send(updatedUser);
 });
 
+/**
+ *  @method PUT
+ *  @desc   Update user address
+ *  @access Private
+ */
+router.put('/address', [auth], async (req: any, res: any) => {
+    const { firstName, lastName, phone } = req.body; // adjust fields as needed
+
+    const updatedUser = await userService.updateAddress({
+        user: req.user,
+        firstName,
+        lastName,
+        phone,
+    });
+
+    res.send(updatedUser);
+});
+
 export default router;

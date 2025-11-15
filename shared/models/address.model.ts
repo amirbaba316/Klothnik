@@ -8,14 +8,12 @@ export interface IAddress extends Document {
     _id: string;
     user: string;
     type: AddressTypeEnum;
-    firstName: string;
-    lastName: string;
     company?: string;
-    address1: string;
-    address2?: string;
+    houseNo: string;
+    locality: string;
     city: string;
     state: string;
-    zipCode: string;
+    pincode: string;
     country: string;
     phone: string;
     isDefault: boolean;
@@ -42,27 +40,18 @@ const AddressSchema = new Schema<IAddress, AddressModel, IAddressMethods>(
             enum: Object.values(AddressTypeEnum),
             required: true,
         },
-        firstName: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        lastName: {
-            type: String,
-            required: true,
-            trim: true,
-        },
         company: {
             type: String,
             trim: true,
         },
-        address1: {
+        houseNo: {
             type: String,
             required: true,
             trim: true,
         },
-        address2: {
+        locality: {
             type: String,
+            required: true,
             trim: true,
         },
         city: {
@@ -75,7 +64,7 @@ const AddressSchema = new Schema<IAddress, AddressModel, IAddressMethods>(
             required: true,
             trim: true,
         },
-        zipCode: {
+        pincode: {
             type: String,
             required: true,
             trim: true,

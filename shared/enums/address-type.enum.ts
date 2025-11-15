@@ -1,4 +1,5 @@
 export enum AddressTypeEnum {
-    SHIPPING = 'shipping',
-    BILLING = 'billing',
+    HOME = 'HOME',
+    FRIENDS = 'FRIENDS',
+    OTHER = 'OTHER',
 }
