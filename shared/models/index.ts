@@ -11,3 +11,4 @@ export * from './user.model';
 export * from './payment.model';
 export * from './category.model';
 export * from './counter.model';
+export * from './cancel-order.model';

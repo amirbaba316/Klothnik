@@ -1,6 +1,6 @@
 import { NotFoundError } from '@hyperflake/http-errors';
 import { OrderStatusEnum } from '@klothnick/shared/enums';
-import { IUser, Order } from '@klothnick/shared/models';
+import { IUser, Order, CancelOrder } from '@klothnick/shared/models';
 
 export default class OrderService {
     /**
@@ -83,19 +83,21 @@ export default class OrderService {
     }
 
     /**
-     *  @desc   Delete order by ID (only if owned by user)
+     *  @desc   Cancel order by ID (only if owned by user)
      */
-    async deleteOrder(params: { user: IUser; orderId: string }) {
-        const { user, orderId } = params;
+    async cancelOrder(params: { user: IUser; orderId: string; reason: string }) {
+        const { user, orderId, reason } = params;
 
         const order = await Order.findOne({ _id: orderId, user: user._id });
 
         if (!order) throw new NotFoundError('Order not found');
 
-        order.status = OrderStatusEnum.CANCELLED;
+        await CancelOrder.create({
+            user: user._id,
+            order: orderId,
+            reason: reason,
+        });
 
-        await order.save();
-
-        return order;
+        return;
     }
 }

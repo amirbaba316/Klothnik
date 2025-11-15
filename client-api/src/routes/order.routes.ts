@@ -51,9 +51,12 @@ router.get('/', [auth], async (req: any, res: any) => {
  *  @desc   Delete orders of logged-in user
  *  @access Private
  */
-router.delete('/:orderId', [auth], async (req: any, res: any) => {
+router.put('/:orderId', [auth], async (req: any, res: any) => {
     const { orderId } = req.params;
-    await orderService.deleteOrder({ user: req.user, orderId: orderId });
+
+    const { reason } = req.body;
+
+    await orderService.cancelOrder({ user: req.user, orderId: orderId, reason });
     res.send();
 });
 
