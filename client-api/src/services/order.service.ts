@@ -1,4 +1,5 @@
 import { NotFoundError } from '@hyperflake/http-errors';
+import { OrderStatusEnum } from '@klothnick/shared/enums';
 import { IUser, Order } from '@klothnick/shared/models';
 
 export default class OrderService {
@@ -60,7 +61,7 @@ export default class OrderService {
     async getAllByUser(params: { user: IUser }) {
         const { user } = params;
 
-        return await Order.find({ user: user._id })
+        return await Order.find({ user: user._id, status: OrderStatusEnum.CANCELLED })
             .populate([{ path: 'items.product' }, { path: 'items.variant' }])
             .sort({ createdAt: -1 });
     }
@@ -79,5 +80,22 @@ export default class OrderService {
         if (!order) throw new NotFoundError('Order not found');
 
         return order.toObject();
+    }
+
+    /**
+     *  @desc   Delete order by ID (only if owned by user)
+     */
+    async deleteOrder(params: { user: IUser; orderId: string }) {
+        const { user, orderId } = params;
+
+        const order = await Order.findOne({ _id: orderId, user: user._id });
+
+        if (!order) throw new NotFoundError('Order not found');
+
+        order.status = OrderStatusEnum.CANCELLED;
+
+        await order.save();
+
+        return order;
     }
 }
