@@ -52,4 +52,20 @@ export default class UserService {
 
         return obj;
     }
+
+    /**
+     * @desc Delete logged-in user profile
+     */
+    async deleteProfile(params: { user: IUser }) {
+        const { user } = params;
+
+        const dbUser = await User.findById(user._id);
+        if (!dbUser) throw new NotFoundError('User not found');
+
+        dbUser.isActive = false;
+
+        await dbUser.save();
+
+        return;
+    }
 }

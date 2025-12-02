@@ -33,4 +33,17 @@ router.put('/', [auth], async (req: any, res: any) => {
     res.send(updatedUser);
 });
 
+/**
+ *  @method DELETE
+ *  @desc   DELETE user profile
+ *  @access Private
+ */
+router.delete('/', [auth], async (req: any, res: any) => {
+    await userService.deleteProfile({
+        user: req.user,
+    });
+
+    res.send();
+});
+
 export default router;
