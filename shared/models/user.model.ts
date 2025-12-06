@@ -10,6 +10,7 @@ export interface IUser extends Document {
     firstName?: string;
     lastName?: string;
     phone: string;
+    gender?: string;
     image?: string;
     role?: UserRoleEnum;
     status?: UserStatusEnum;
@@ -43,6 +44,10 @@ export const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
             trim: true,
         },
         phone: {
+            type: String,
+            trim: true,
+        },
+        gender: {
             type: String,
             trim: true,
         },

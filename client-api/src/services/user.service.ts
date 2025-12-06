@@ -27,8 +27,14 @@ export default class UserService {
     /**
      * @desc Update logged-in user profile
      */
-    async updateProfile(params: { user: IUser; firstName?: string; lastName?: string; phone?: string }) {
-        const { user, firstName, lastName, phone } = params;
+    async updateProfile(params: {
+        user: IUser;
+        firstName?: string;
+        lastName?: string;
+        gender: string;
+        phone?: string;
+    }) {
+        const { user, firstName, lastName, phone, gender } = params;
 
         console.log(params);
 
@@ -38,6 +44,7 @@ export default class UserService {
         if (firstName !== undefined) dbUser.firstName = firstName;
         if (lastName !== undefined) dbUser.lastName = lastName;
         if (phone !== undefined) dbUser.phone = phone;
+        if (gender !== undefined) dbUser.gender = gender;
 
         await dbUser.save();
 

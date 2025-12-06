@@ -21,13 +21,14 @@ router.get('/', [auth], async (req: any, res: any) => {
  *  @access Private
  */
 router.put('/', [auth], async (req: any, res: any) => {
-    const { firstName, lastName, phone } = req.body; // adjust fields as needed
+    const { firstName, lastName, phone, gender } = req.body; // adjust fields as needed
 
     const updatedUser = await userService.updateProfile({
         user: req.user,
         firstName,
         lastName,
         phone,
+        gender,
     });
 
     res.send(updatedUser);
