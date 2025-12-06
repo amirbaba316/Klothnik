@@ -83,9 +83,18 @@ export default class OrderService {
     async getById(params: { user: IUser; orderId: string }) {
         const { user, orderId } = params;
 
-        const order = await Order.findOne({ _id: orderId, user: user._id }).populate([
+        const order = await Order.findOne({
+            _id: orderId,
+            user: user._id,
+        }).populate([
             { path: 'items.product' },
             { path: 'items.variant' },
+            {
+                path: 'shippingAddress',
+                populate: {
+                    path: 'user', // this is the nested populate
+                },
+            },
         ]);
 
         if (!order) throw new NotFoundError('Order not found');
