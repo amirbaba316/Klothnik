@@ -62,7 +62,16 @@ export default class OrderService {
         const { user } = params;
 
         return await Order.find({ user: user._id, status: { $ne: OrderStatusEnum.CANCELLED } })
-            .populate([{ path: 'items.product' }, { path: 'items.variant' }])
+            .populate([
+                { path: 'items.product' },
+                { path: 'items.variant' },
+                {
+                    path: 'shippingAddress',
+                    populate: {
+                        path: 'user', // this is the nested populate
+                    },
+                },
+            ])
             .sort({ createdAt: -1 });
     }
 
