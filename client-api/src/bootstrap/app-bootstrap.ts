@@ -4,6 +4,7 @@ import cors from 'cors';
 import express, { Express } from 'express';
 import moment from 'moment';
 import morgan from 'morgan';
+import path from 'path';
 
 import { init as initDatabase } from '../configuration/database.config';
 import { init as initRouter } from '../configuration/router.config';
@@ -37,6 +38,8 @@ export class AppBootstrap {
 
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
+
+        this.app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
         return this;
     }

@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Delete your Klothnick account</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #fef3c7; /* amber-100-ish */
+      min-height: 100vh;
+    }
+
+    .page-wrapper {
+      min-height: 100vh;
+      padding: 4rem 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .spacer {
+      flex: 1;
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .spacer {
+        display: flex;
+      }
+    }
+
+    .main {
+      flex: 1;
+      width: 100%;
+    }
+
+    .logo {
+      height: 40px;
+    }
+
+    .card {
+      margin-top: 2rem;
+      background: #e5e7eb; /* gray-200 */
+      padding: 3rem;
+      border-radius: 0.75rem;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        padding: 2rem;
+      }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .subtitle {
+      margin-top: 0.75rem;
+      color: #6b7280;
+      max-width: 32rem;
+      font-size: 0.95rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #d1d5db;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: #6b7280;
+      box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.4);
+    }
+
+    input.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4);
+    }
+
+    .error-message {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: #ef4444;
+    }
+
+    .submit-wrapper {
+      margin-top: 2rem;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #ffffff;
+      background: #9ca3af; /* gray-400 */
+      cursor: pointer;
+      transition: background-color 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background: #4b5563; /* gray-600 */
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: #4b5563;
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 50;
+      display: none;
+      animation: slide-in 0.25s ease-out;
+    }
+
+    .toast {
+      background: #22c55e;
+      color: #ffffff;
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      font-size: 0.95rem;
+    }
+
+    .toast-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    @keyframes slide-in {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Toast -->
+  <div class="toast-container" id="toast">
+    <div class="toast">
+      <svg
+        class="toast-icon"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 13l4 4L19 7"
+        />
+      </svg>
+      <span>Request sent successfully.</span>
+    </div>
+  </div>
+
+  <div class="page-wrapper">
+    <div class="container">
+      <div class="spacer"></div>
+
+      <main class="main">
+        <!-- Update src to where you host the logo -->
+        <img src="/assets/klothnick.svg" alt="Klothnick" class="logo" />
+
+        <section class="card">
+          <h1>Delete your account</h1>
+          <p class="subtitle">
+            Enter your phone number to request account deletion.
+          </p>
+
+          <form id="delete-form" novalidate>
+            <div>
+              <label for="phoneNumber">Phone Number</label>
+              <input
+                type="text"
+                id="phoneNumber"
+                name="phoneNumber"
+                placeholder="Enter your phone number"
+              />
+              <div class="error-message" id="error-message"></div>
+            </div>
+
+            <div class="submit-wrapper">
+              <button type="submit" id="submit-button">Submit</button>
+            </div>
+          </form>
+        </section>
+
+        <footer class="footer">
+          Copyright © <span id="year"></span> Klothnick · Privacy &amp; terms
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById("delete-form");
+      const phoneInput = document.getElementById("phoneNumber");
+      const errorEl = document.getElementById("error-message");
+      const button = document.getElementById("submit-button");
+      const toast = document.getElementById("toast");
+
+      document.getElementById("year").textContent =
+        new Date().getFullYear().toString();
+
+      function showError(message) {
+        errorEl.textContent = message;
+        phoneInput.classList.add("error");
+      }
+
+      function clearError() {
+        errorEl.textContent = "";
+        phoneInput.classList.remove("error");
+      }
+
+      function showToast() {
+        toast.style.display = "block";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 3000);
+      }
+
+      phoneInput.addEventListener("input", () => {
+        clearError();
+      });
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        clearError();
+
+        const value = phoneInput.value.trim();
+
+        if (!value) {
+          showError("Invalid phone number.");
+          return;
+        }
+
+        // Simulate async request (like your original timeout)
+        button.disabled = true;
+        button.textContent = "Submitting...";
+
+        // TODO: Replace this with a real API call if needed:
+        // fetch('https://your-api/delete-account', { method: 'POST', body: JSON.stringify({ phoneNumber: value }) })
+        setTimeout(function () {
+          form.reset();
+          button.disabled = false;
+          button.textContent = "Submit";
+          showToast();
+        }, 2000);
+      });
+    })();
+  </script>
+</body>
+</html>

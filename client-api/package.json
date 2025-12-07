@@ -4,12 +4,11 @@
   "main": "app.js",
   "scripts": {
     "dev": "ts-node-dev --conditions=development --respawn --transpile-only app.ts",
-    "build": "npx tsc --build",
+    "build": "npx tsc --build && cp -R src/services/templates build/services && cp -R src/assets build/assets",
     "start": "node build/app.js"
   },
   "dependencies": {
     "@klothnick/shared": "*",
-   
     "razorpay": "^2.9.6"
   }
 }
