@@ -39,7 +39,8 @@ export class AppBootstrap {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
 
-        this.app.use('/assets', express.static(path.join(__dirname, 'assets')));
+        const assetsPath = path.join(__dirname, 'assets');
+        this.app.use('/api/v1/legal/assets', express.static(assetsPath));
 
         return this;
     }
