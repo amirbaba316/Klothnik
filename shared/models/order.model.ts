@@ -32,6 +32,7 @@ export interface IOrder /* extends Document (provided by mongoose typings) */ {
     user: string; // String _id of User
     items: IOrderItem[];
     shippingFee: number;
+    subTotal: number;
     tax: number;
     discount?: number;
     total: number;
@@ -118,6 +119,12 @@ const OrderSchema = new Schema<IOrder, OrderModel, IOrderMethods>(
             type: Number,
             min: 0,
             default: 0,
+        },
+
+        subTotal: {
+            type: Number,
+            required: true,
+            min: 0,
         },
 
         tax: {

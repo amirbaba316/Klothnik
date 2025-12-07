@@ -10,11 +10,12 @@ type VerifyOtpInput = { phone: string; otp: string };
 
 export default class AuthService {
     async createOtpVerification({ phone }: CreateOtpInput) {
-        if (phone === process.env.TEST_ACCOUNT_PHONE_NUMBER) return;
+        // DEMO ACCOUNT SHORT CIRCUIT
+        if (phone === process.env.TEST_ACCOUNT_PHONE_NUMBER) {
+            return { otp: process.env.TEST_ACCOUNT_OTP };
+        }
 
         let otpVerification = await OtpVerification.findOne({ phone });
-
-        console.log('Here');
 
         if (!otpVerification) {
             otpVerification = await OtpVerification.create({ phone });
@@ -33,6 +34,7 @@ export default class AuthService {
     async verifyOtp({ phone, otp }: VerifyOtpInput) {
         let otpVerification = await OtpVerification.findOne({ phone });
 
+        // DEMO ACCOUNT LOGIN - NO DB OTP, NO SMS
         if (phone === process.env.TEST_ACCOUNT_PHONE_NUMBER) {
             otpVerification = {
                 phone,
@@ -48,6 +50,7 @@ export default class AuthService {
         }
 
         let user = await User.findOne({ phone: phone });
+
         if (!user) {
             user = await User.create({ phone: phone });
         } else if (user.status === UserStatusEnum.DELETED) {

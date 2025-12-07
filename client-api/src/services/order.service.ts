@@ -14,11 +14,9 @@ export default class OrderService {
             quantity: number;
             price: number;
         }[];
-        subtotal: number;
         shippingFee: number;
         tax: number;
         discount?: number;
-        total: number;
         shippingAddress: string;
         billingAddress?: string;
         paymentMethod: string;
@@ -27,21 +25,27 @@ export default class OrderService {
         const {
             user,
             items,
-            subtotal,
             shippingFee,
             tax,
-            discount,
-            total,
+            discount = 0,
             shippingAddress,
             billingAddress,
             paymentMethod,
             notes,
         } = params;
 
+        // 1️⃣ subtotal = sum(price × quantity)
+        const subTotal = items.reduce((sum, item) => {
+            return sum + item.price * item.quantity;
+        }, 0);
+
+        // 2️⃣ total = subtotal + tax + shipping - discount
+        const total = subTotal + tax + shippingFee - discount;
+
         const order = await Order.create({
             user: user._id,
             items,
-            subtotal,
+            subTotal,
             shippingFee,
             tax,
             discount,

@@ -6,27 +6,14 @@ const router = express.Router();
 const orderService = new OrderService();
 
 router.post('/', [auth], async (req: any, res: any) => {
-    const {
-        items,
-        subtotal,
-        shippingFee,
-        tax,
-        discount,
-        total,
-        shippingAddress,
-        billingAddress,
-        paymentMethod,
-        notes,
-    } = req.body;
+    const { items, shippingFee, tax, discount, shippingAddress, billingAddress, paymentMethod, notes } = req.body;
 
     const order = await orderService.create({
         user: req.user,
         items,
-        subtotal,
         shippingFee,
         tax,
         discount,
-        total,
         shippingAddress,
         billingAddress,
         paymentMethod,
