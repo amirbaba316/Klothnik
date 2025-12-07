@@ -29,7 +29,10 @@ RUN npm run build -w @klothnick/shared
 RUN npm run build -w @klothnick/client-api
 
 # Ensure node_modules directories exist
-RUN mkdir -p /builder-app/node_modules /builder-app/shared/node_modules /builder-app/client-api/node_modules
+RUN mkdir -p client-api/build/services \
+    && mkdir -p client-api/build/assets \
+    && cp -R client-api/src/services/templates client-api/build/services \
+    && cp -R client-api/src/assets client-api/build/assets
 
 # Stage 2: Runner
 FROM node:iron-alpine as runner
