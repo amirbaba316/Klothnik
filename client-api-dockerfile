@@ -33,9 +33,7 @@ RUN npm run build -w @klothnick/client-api
 
 # ✅ Put templates + assets under build/src/ to match __dirname
 RUN mkdir -p client-api/build/src/templates \
-    && mkdir -p client-api/build/src/assets \
-    && cp -R client-api/src/templates/* client-api/build/src/templates/ \
-    && cp -R client-api/src/assets/* client-api/build/src/assets/
+    && cp -R client-api/src/templates/* client-api/build/src/templates/
 
 # ============================
 # Stage 2: Runner
