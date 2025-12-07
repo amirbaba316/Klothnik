@@ -1,62 +1,60 @@
+# ============================
 # Stage 1: Builder
-FROM node:iron-alpine as builder
+# ============================
+FROM node:iron-alpine AS builder
 
 # Set Working directory
 WORKDIR /builder-app
 
-# Copy top level package.json and tsconfig.json
+# Copy monorepo root package.json + tsconfig.json
 COPY ./package.json .
 COPY ./tsconfig.json .
 
-# Copy shared folder's package.json and tsconfig.json
+# Copy shared package + tsconfig
 COPY ./shared/package.json ./shared/
 COPY ./shared/tsconfig.json ./shared/
 
-# Copy client-api folder's package.json and tsconfig.json
+# Copy client-api package + tsconfig
 COPY ./client-api/package.json ./client-api/
 COPY ./client-api/tsconfig.json ./client-api/
 
-# Install dependencies
+# Install all workspace dependencies
 RUN npm install
 
+# Now copy full source code
 COPY ./shared ./shared
-
 COPY ./client-api ./client-api
 
+# Build shared
 RUN npm run build -w @klothnick/shared
 
 # Build client-api
 RUN npm run build -w @klothnick/client-api
 
-# Ensure node_modules directories exist
+# Copy templates + assets into the build folder
 RUN mkdir -p client-api/build/templates \
     && mkdir -p client-api/build/assets \
     && cp -R client-api/src/templates/* client-api/build/templates/ \
     && cp -R client-api/src/assets/* client-api/build/assets/
 
+# ============================
 # Stage 2: Runner
-FROM node:iron-alpine as runner
+# ============================
+FROM node:iron-alpine AS runner
 
-# Set Working directory
 WORKDIR /app
 
-# Ensure node_modules directories exist
-RUN mkdir -p /builder-app/node_modules /builder-app/shared/node_modules /builder-app/client-api/node_modules
-
-# Copy top level package.json and node_modules
+# Copy root package.json + node_modules
 COPY --from=builder /builder-app/package.json .
 COPY --from=builder /builder-app/node_modules ./node_modules
 
-# Copy shared folder's package.json, node_modules, and build folder
+# Copy shared build output
 COPY --from=builder /builder-app/shared/package.json ./shared/package.json
 COPY --from=builder /builder-app/shared/build ./shared/build
 
-# Copy client-api folder's package.json, node_modules, build folder, and assets
+# Copy client-api build output (NO node_modules needed)
 COPY --from=builder /builder-app/client-api/package.json ./client-api/package.json
-COPY --from=builder /builder-app/client-api/node_modules ./client-api/node_modules
 COPY --from=builder /builder-app/client-api/build ./client-api/build
 
-# Command to run the application
+# Start the API
 CMD ["npm", "start", "-w", "@klothnick/client-api"]
-
-# docker build --platform linux/amd64  -t amirdev/client-api -f client-api-dockerfile .
