@@ -14,33 +14,47 @@ export default class OrderService {
             quantity: number;
             price: number;
         }[];
-        shippingFee: number;
-        tax: number;
-        discount?: number;
+        shippingFee?: any;
+        tax?: any;
+        discount?: any;
         shippingAddress: string;
         billingAddress?: string;
         paymentMethod: string;
         notes?: string;
     }) {
-        const {
-            user,
-            items,
-            shippingFee,
-            tax,
-            discount = 0,
-            shippingAddress,
-            billingAddress,
-            paymentMethod,
-            notes,
-        } = params;
+        const { user, items, shippingAddress, billingAddress, paymentMethod, notes } = params;
 
-        // 1️⃣ subtotal = sum(price × quantity)
+        const toNumber = (value: any, fallback = 0): number => {
+            if (value === null || value === undefined) return fallback;
+            if (typeof value === 'string' && value.trim() === '') return fallback;
+
+            const n = Number(value);
+            return Number.isFinite(n) ? n : fallback;
+        };
+
+        // tax / discount can be “not available” → we treat as 0
+        const shippingFee = toNumber(params.shippingFee, 0);
+        const tax = toNumber(params.tax, 0);
+        const discount = toNumber(params.discount, 0);
+
         const subTotal = items.reduce((sum, item) => {
-            return sum + item.price * item.quantity;
+            const price = toNumber(item.price, 0);
+            const qty = toNumber(item.quantity, 1);
+            return sum + price * qty;
         }, 0);
 
-        // 2️⃣ total = subtotal + tax + shipping - discount
         const total = subTotal + tax + shippingFee - discount;
+
+        if (!Number.isFinite(total)) {
+            console.error('Invalid total value:', {
+                subTotal,
+                tax,
+                shippingFee,
+                discount,
+                total,
+            });
+            throw new Error('Computed total is invalid (NaN or Infinity)');
+        }
 
         const order = await Order.create({
             user: user._id,
