@@ -15,15 +15,13 @@ export default class UserService {
     private storageClient = new StorageClient();
 
     async getAll(params: { role?: UserRoleEnum }) {
-        const users = await User.find(params.role ? { role: params.role } : {})
-            .populate('addresses paymentMethods')
-            .sort({ createdAt: -1 });
+        const users = await User.find(params.role ? { role: params.role } : {}).sort({ createdAt: -1 });
 
         return Promise.all(users.map((u) => this.appendSignedUrl(u.toObject())));
     }
 
     async getById(params: { userId: string }) {
-        const user = await User.findById(params.userId).populate('addresses paymentMethods');
+        const user = await User.findById(params.userId);
         if (!user) throw new NotFoundError('User not found');
         return this.appendSignedUrl(user.toObject());
     }

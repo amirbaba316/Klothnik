@@ -33,7 +33,7 @@ export interface IOrder /* extends Document (provided by mongoose typings) */ {
     items: IOrderItem[];
     shippingFee: number;
     subTotal: number;
-    tax: number;
+    tax?: number;
     discount?: number;
     total: number;
     shippingAddress: string; // String _id of Address
