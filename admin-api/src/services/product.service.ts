@@ -1,4 +1,5 @@
 import { NotFoundError } from '@hyperflake/http-errors';
+import { ProductStatusEnum } from '@klothnick/shared/enums';
 import { Product } from '@klothnick/shared/models';
 import { IProductOption } from '@klothnick/shared/models';
 import { StorageClient } from '@klothnick/shared/storage-client/aws-storage-client';
@@ -16,7 +17,7 @@ interface CreateProductParams {
     quantity?: number;
     weight?: number;
     category: string;
-    status?: string;
+    status?: ProductStatusEnum;
     tags?: string[];
     options?: IProductOption;
     variants?: any[];
@@ -58,7 +59,7 @@ export default class ProductService {
         if (files?.length) {
             for (const file of files) {
                 const ext = file.originalname.split('.').pop();
-                const key = `products/${name}-${Date.now()}.${ext}`;
+                const key = `products/${Date.now()}.${ext}`;
 
                 await this.storageClient.upload({
                     bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
@@ -170,7 +171,7 @@ export default class ProductService {
             imageKeys = [];
             for (const file of files) {
                 const ext = file.originalname.split('.').pop();
-                const key = `products/${name}-${Date.now()}.${ext}`;
+                const key = `products/${Date.now()}.${ext}`;
 
                 await this.storageClient.upload({
                     bucket: process.env.AWS_MEDIA_BUCKET_NAME!,

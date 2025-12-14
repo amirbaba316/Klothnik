@@ -1,5 +1,6 @@
 import { HydratedDocument, model, Model, Schema, Types } from 'mongoose';
 import { Counter } from './counter.model'; // for generating unique IDs
+import { ProductStatusEnum } from '../enums';
 
 const collectionName = 'Product';
 
@@ -68,7 +69,7 @@ export interface IProduct {
     category: string;
     images: string[];
     imageUrls: string[];
-    status: string;
+    status?: ProductStatusEnum;
     tags?: string[];
     options?: IProductOption;
     variants?: string[];
@@ -146,7 +147,8 @@ const ProductSchema = new Schema<IProduct, ProductModel, IProductMethods>(
         ],
         status: {
             type: String,
-            default: 'Active',
+            enum: Object.values(ProductStatusEnum),
+            default: ProductStatusEnum.ACTIVE,
         },
         tags: [
             {

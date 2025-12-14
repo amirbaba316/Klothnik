@@ -3,6 +3,8 @@ export * from './order-status.enum';
 export * from './payment-status.enum';
 export * from './payment-method-type.enum';
 export * from './user-status.enum';
+export * from './category-status.enum';
+export * from './product-status.enum';
 export * from './user-role.enum';
 export * from './address-type.enum';
 export * from './product-variant-status.enum';
