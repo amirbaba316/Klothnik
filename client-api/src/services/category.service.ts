@@ -9,7 +9,7 @@ export default class CategoryService {
      *  @desc   Get all categories
      */
     async getAll() {
-        const categories = await Category.find({ status: 'Active' }).sort({ name: 1 });
+        const categories = await Category.find({ status: 'ENABLED' }).sort({ name: 1 });
 
         return Promise.all(
             categories.map(async (cat) => {
