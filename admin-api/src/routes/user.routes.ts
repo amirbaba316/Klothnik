@@ -7,6 +7,11 @@ const router = express.Router();
 const userService = new UserService();
 const upload = multer();
 
+// Helper to ensure string params
+const getStringParam = (param: string | string[]): string => {
+    return Array.isArray(param) ? param[0] : param;
+};
+
 /**
  * GET /admin-api/users
  * Get all users
@@ -22,7 +27,9 @@ router.get('/', async (req, res) => {
  * Get a user by ID
  */
 router.get('/:userId', async (req, res) => {
-    const user = await userService.getById({ userId: req.params.userId });
+    const user = await userService.getById({
+        userId: getStringParam(req.params.userId),
+    });
     res.send(user);
 });
 
@@ -34,7 +41,7 @@ router.put('/:userId', upload.single('file'), async (req, res) => {
     const { role, status, isActive } = req.body;
 
     const user = await userService.update({
-        userId: req.params.userId,
+        userId: getStringParam(req.params.userId),
         role,
         status,
         isActive: isActive !== undefined ? isActive === 'true' : undefined,
@@ -49,7 +56,9 @@ router.put('/:userId', upload.single('file'), async (req, res) => {
  * Delete a user
  */
 router.delete('/:userId', async (req, res) => {
-    await userService.delete({ userId: req.params.userId });
+    await userService.delete({
+        userId: getStringParam(req.params.userId),
+    });
     res.send({ success: true });
 });
 

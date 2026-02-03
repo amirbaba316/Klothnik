@@ -6,13 +6,18 @@ const upload = multer();
 const router = express.Router({ mergeParams: true }); // Important for accessing :categoryId
 const productService = new ProductService();
 
+// Helper to ensure string params
+const getStringParam = (param: string | string[]): string => {
+    return Array.isArray(param) ? param[0] : param;
+};
+
 /**
  *  @method POST
  *  @desc   Create a new product
  *  @access Admin
  */
 router.post('/', upload.array('files'), async (req, res) => {
-    const { categoryId } = req.params;
+    const categoryId = getStringParam(req.params.categoryId);
     const {
         name,
         description,
@@ -72,7 +77,9 @@ router.get('/', async (req, res) => {
  *  @access Admin
  */
 router.get('/:productId', async (req, res) => {
-    const product = await productService.getById({ productId: req.params.productId });
+    const product = await productService.getById({
+        productId: getStringParam(req.params.productId),
+    });
     res.send(product);
 });
 
@@ -104,7 +111,7 @@ router.put('/:productId', upload.array('files'), async (req, res) => {
     const files = req.files as Express.Multer.File[];
 
     const product = await productService.update({
-        productId: req.params.productId,
+        productId: getStringParam(req.params.productId),
         name,
         description,
         price: price ? Number(price) : undefined,
@@ -133,7 +140,9 @@ router.put('/:productId', upload.array('files'), async (req, res) => {
  *  @access Admin
  */
 router.delete('/:productId', async (req, res) => {
-    await productService.delete({ productId: req.params.productId });
+    await productService.delete({
+        productId: getStringParam(req.params.productId),
+    });
     res.send({ success: true });
 });
 
