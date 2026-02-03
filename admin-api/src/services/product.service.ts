@@ -59,7 +59,7 @@ export default class ProductService {
         if (files?.length) {
             for (const file of files) {
                 const ext = file.originalname.split('.').pop();
-                const key = `products/${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+                const key = `products/${name}-${Date.now()}.${ext}`;
 
                 await this.storageClient.upload({
                     bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
@@ -193,7 +193,7 @@ export default class ProductService {
             imageKeys = [];
             for (const file of files) {
                 const ext = file.originalname.split('.').pop();
-                const key = `products/${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+                const key = `products/${name}-${Date.now()}.${ext}`;
 
                 await this.storageClient.upload({
                     bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
