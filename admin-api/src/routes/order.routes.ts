@@ -41,6 +41,18 @@ router.put('/:orderId', async (req, res) => {
 });
 
 /**
+ * @method PUT
+ * @desc   Update order status or tracking number
+ * @access Admin
+ */
+router.put('/:orderId/view-order', async (req, res) => {
+    const updatedOrder = await orderService.updateViewOrder({
+        orderId: req.params.orderId,
+    });
+    res.send(updatedOrder);
+});
+
+/**
  * @method DELETE
  * @desc   Delete an order
  * @access Admin

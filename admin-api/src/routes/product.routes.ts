@@ -3,7 +3,7 @@ import multer from 'multer';
 import ProductService from '../services/product.service';
 
 const upload = multer();
-const router = express.Router();
+const router = express.Router({ mergeParams: true }); // Important for accessing :categoryId
 const productService = new ProductService();
 
 /**
@@ -12,6 +12,7 @@ const productService = new ProductService();
  *  @access Admin
  */
 router.post('/', upload.array('files'), async (req, res) => {
+    const { categoryId } = req.params;
     const {
         name,
         description,
@@ -24,11 +25,9 @@ router.post('/', upload.array('files'), async (req, res) => {
         barcode,
         quantity,
         weight,
-        category,
         status,
         tags,
         options,
-        variants,
         reviews,
     } = req.body;
 
@@ -46,11 +45,10 @@ router.post('/', upload.array('files'), async (req, res) => {
         barcode,
         quantity: quantity ? Number(quantity) : undefined,
         weight: weight ? Number(weight) : undefined,
-        category,
+        category: categoryId,
         status,
         tags: tags ? JSON.parse(tags) : [],
-        options: options ? JSON.parse(options) : [],
-        variants: variants ? JSON.parse(variants) : [],
+        options: options ? JSON.parse(options) : undefined,
         reviews: reviews ? JSON.parse(reviews) : [],
         files,
     });
@@ -60,10 +58,10 @@ router.post('/', upload.array('files'), async (req, res) => {
 
 /**
  *  @method GET
- *  @desc   Get all products
+ *  @desc   Get all products for a category
  *  @access Admin
  */
-router.get('/', async (_req, res) => {
+router.get('/', async (req, res) => {
     const products = await productService.getAll();
     res.send(products);
 });
@@ -100,7 +98,6 @@ router.put('/:productId', upload.array('files'), async (req, res) => {
         status,
         tags,
         options,
-        variants,
         reviews,
     } = req.body;
 
@@ -123,7 +120,6 @@ router.put('/:productId', upload.array('files'), async (req, res) => {
         status,
         tags: tags ? JSON.parse(tags) : undefined,
         options: options ? JSON.parse(options) : undefined,
-        variants: variants ? JSON.parse(variants) : undefined,
         reviews: reviews ? JSON.parse(reviews) : undefined,
         files,
     });

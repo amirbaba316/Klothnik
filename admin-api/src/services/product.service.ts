@@ -1,7 +1,9 @@
 import { NotFoundError } from '@hyperflake/http-errors';
+import { ProductStatusEnum } from '@klothnick/shared/enums';
 import { Product } from '@klothnick/shared/models';
 import { IProductOption } from '@klothnick/shared/models';
 import { StorageClient } from '@klothnick/shared/storage-client/aws-storage-client';
+import ProductVariantService from './product-variant.service';
 
 interface CreateProductParams {
     name: string;
@@ -16,10 +18,9 @@ interface CreateProductParams {
     quantity?: number;
     weight?: number;
     category: string;
-    status?: string;
+    status?: ProductStatusEnum;
     tags?: string[];
     options?: IProductOption;
-    variants?: any[];
     reviews?: any[];
     files?: Express.Multer.File[];
 }
@@ -30,6 +31,7 @@ interface UpdateProductParams extends Partial<CreateProductParams> {
 
 export default class ProductService {
     private storageClient = new StorageClient();
+    private variantService = new ProductVariantService();
 
     async create(params: CreateProductParams) {
         const {
@@ -48,7 +50,6 @@ export default class ProductService {
             status,
             tags,
             options,
-            variants,
             reviews,
             files,
         } = params;
@@ -58,7 +59,7 @@ export default class ProductService {
         if (files?.length) {
             for (const file of files) {
                 const ext = file.originalname.split('.').pop();
-                const key = `products/${name}-${Date.now()}.${ext}`;
+                const key = `products/${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
 
                 await this.storageClient.upload({
                     bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
@@ -87,7 +88,7 @@ export default class ProductService {
             status,
             tags,
             options,
-            variants,
+            variants: [], // Initialize empty variants array
             reviews,
             images: imageKeys,
         });
@@ -96,13 +97,13 @@ export default class ProductService {
     }
 
     async getAll() {
-        const products = await Product.find().populate('category variants').sort({ createdAt: -1 });
+        const products = await Product.find().populate('category').populate('variants').sort({ createdAt: -1 });
 
         const signedProducts = await Promise.all(
             products.map(async (p) => {
                 const product = p.toObject();
 
-                if (Array.isArray(product.images)) {
+                if (Array.isArray(product.images) && product.images.length > 0) {
                     product.imageUrls = await Promise.all(
                         product.images.map((key: string) =>
                             this.storageClient.getSignedUrlForGetObject({
@@ -111,6 +112,8 @@ export default class ProductService {
                             })
                         )
                     );
+                } else {
+                    product.imageUrls = [];
                 }
 
                 return product;
@@ -121,12 +124,13 @@ export default class ProductService {
     }
 
     async getById({ productId }: { productId: string }) {
-        const product = await Product.findById(productId).populate('category variants');
+        const product = await Product.findById(productId).populate('category').populate('variants');
+
         if (!product) throw new NotFoundError('Product not found');
 
         const productObj = product.toObject();
 
-        if (Array.isArray(productObj.images)) {
+        if (Array.isArray(productObj.images) && productObj.images.length > 0) {
             productObj.imageUrls = await Promise.all(
                 productObj.images.map((key: string) =>
                     this.storageClient.getSignedUrlForGetObject({
@@ -135,6 +139,8 @@ export default class ProductService {
                     })
                 )
             );
+        } else {
+            productObj.imageUrls = [];
         }
 
         return productObj;
@@ -157,7 +163,6 @@ export default class ProductService {
         status,
         tags,
         options,
-        variants,
         reviews,
         files,
     }: UpdateProductParams) {
@@ -166,11 +171,29 @@ export default class ProductService {
 
         let imageKeys = product.images || [];
 
-        if (files?.length) {
+        // Only update images if new files are provided
+        if (files && files.length > 0) {
+            // Delete old images from S3
+            if (imageKeys.length > 0) {
+                await Promise.all(
+                    imageKeys.map(async (key) => {
+                        try {
+                            await this.storageClient.delete({
+                                bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
+                                key,
+                            });
+                        } catch (error) {
+                            console.error(`Failed to delete image ${key}:`, error);
+                        }
+                    })
+                );
+            }
+
+            // Upload new images
             imageKeys = [];
             for (const file of files) {
                 const ext = file.originalname.split('.').pop();
-                const key = `products/${name}-${Date.now()}.${ext}`;
+                const key = `products/${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
 
                 await this.storageClient.upload({
                     bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
@@ -183,6 +206,7 @@ export default class ProductService {
             }
         }
 
+        // Update fields
         product.name = name ?? product.name;
         product.description = description ?? product.description;
         product.price = price ?? product.price;
@@ -198,15 +222,37 @@ export default class ProductService {
         product.status = status ?? product.status;
         product.tags = tags ?? product.tags;
         product.options = options ?? product.options;
-        product.variants = variants ?? product.variants;
         product.images = imageKeys;
+        // Note: We don't update variants array here - it's managed by variant service
 
         const updated = await product.save();
         return updated.toObject();
     }
 
     async delete({ productId }: { productId: string }) {
-        const deleted = await Product.findByIdAndDelete(productId);
-        if (!deleted) throw new NotFoundError('Product not found');
+        const product = await Product.findById(productId);
+        if (!product) throw new NotFoundError('Product not found');
+
+        // Delete all variants first
+        await this.variantService.deleteByProductId(productId);
+
+        // Delete images from S3
+        if (product.images && product.images.length > 0) {
+            await Promise.all(
+                product.images.map(async (image) => {
+                    try {
+                        await this.storageClient.delete({
+                            bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
+                            key: image,
+                        });
+                    } catch (error) {
+                        console.error(`Failed to delete image ${image}:`, error);
+                    }
+                })
+            );
+        }
+
+        // Delete the product
+        await Product.findByIdAndDelete(productId);
     }
 }

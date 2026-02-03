@@ -8,7 +8,8 @@ import userRoutes from '../routes/user.routes';
 export const init = (app: Express) => {
     app.use('/api/v1/categories', categoryRoutes);
     app.use('/api/v1/categories/:categoryId/products', productRoutes);
-    app.use('/api/v1/categories/:categoryId/product-variants', productVariantRoutes);
+    // Variants are now nested under products, not categories
+    app.use('/api/v1/products/:productId/variants', productVariantRoutes);
     app.use('/api/v1/orders', orderRoutes);
     app.use('/api/v1/users', userRoutes);
 };

@@ -1,6 +1,6 @@
 import { HydratedDocument, model, Model, Schema } from 'mongoose';
 import { Counter } from './counter.model';
-import mongoose from 'mongoose';
+import { CategoryStatusEnum } from '../enums';
 
 const collectionName = 'Category';
 
@@ -46,7 +46,8 @@ export const CategorySchema = new Schema<ICategory, CategoryModel, ICategoryMeth
         },
         status: {
             type: String,
-            default: 'Active',
+            enum: Object.values(CategoryStatusEnum),
+            default: CategoryStatusEnum.ENABLED,
         },
     },
     {

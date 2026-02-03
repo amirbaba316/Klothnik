@@ -18,7 +18,6 @@ export interface ICancelOrderMethods {}
 export type CancelOrderDocument = HydratedDocument<ICancelOrder, ICancelOrderMethods>;
 export interface CancelOrderModel extends Model<ICancelOrder, {}, ICancelOrderMethods> {}
 
-/** ================== Main Schema ================== */
 const CancelOrderSchema = new Schema<ICancelOrder, CancelOrderModel, ICancelOrderMethods>(
     {
         _id: { type: String },

@@ -81,7 +81,6 @@ export const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
         paymentMethods: [
             {
                 type: String,
-                ref: 'PaymentMethod',
             },
         ],
     },

@@ -18,7 +18,7 @@ export default class CategoryService {
 
         if (file) {
             const ext = file.originalname.split('.').pop();
-            const key = `categories/${name}-${Date.now()}.${ext}`;
+            const key = `categories/${Date.now()}.${ext}`;
 
             await this.storageClient.upload({
                 bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
@@ -86,7 +86,7 @@ export default class CategoryService {
 
         if (file) {
             const ext = file.originalname.split('.').pop();
-            const key = `categories/${updates.name}-${Date.now()}.${ext}`;
+            const key = `categories/${Date.now()}.${ext}`;
 
             await this.storageClient.upload({
                 bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
@@ -113,8 +113,13 @@ export default class CategoryService {
     }
 
     async delete(params: { categoryId: string }) {
-        const deleted = await Category.findByIdAndDelete(params.categoryId);
-        if (!deleted) throw new NotFoundError('Category not found');
+        const category = await Category.findByIdAndDelete(params.categoryId);
+        if (!category) throw new NotFoundError('Category not found');
+
+        await this.storageClient.delete({
+            bucket: process.env.AWS_MEDIA_BUCKET_NAME!,
+            key: category.image,
+        });
     }
 
     private async getSignedUrl(key: string): Promise<string> {

@@ -43,6 +43,7 @@ export interface IOrder /* extends Document (provided by mongoose typings) */ {
     status: OrderStatusEnum;
     trackingNumber?: string;
     notes?: string;
+    isViewed: boolean;
     orderTimeline?: IOrderTimeline;
 }
 
@@ -183,6 +184,11 @@ const OrderSchema = new Schema<IOrder, OrderModel, IOrderMethods>(
         notes: {
             type: String,
             trim: true,
+        },
+
+        isViewed: {
+            type: Boolean,
+            default: false,
         },
 
         orderTimeline: {

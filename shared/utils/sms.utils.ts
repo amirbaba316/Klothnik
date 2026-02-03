@@ -16,10 +16,18 @@ export default class SmsService {
             return;
         }
 
-        const url = `https://2factor.in/API/V1/${this.apiKey}/SMS/${phone}/${otp}`;
-
         try {
-            const response = await axios.get(url);
+            const senderId = 'KLTHNK'; // Your registered 6-char Sender ID
+            const templateName = 'OTP_VERIFICATION'; // Your registered template
+
+            const response = await axios.get(
+                `https://2factor.in/API/V1/${this.apiKey}/SMS/${phone}/${otp}/${templateName}`,
+                {
+                    params: {
+                        sender_id: senderId, // Add sender ID
+                    },
+                }
+            );
             if (response.data.Status !== 'Success') throw new BadRequestError('An error occurred while sending OTP');
             return;
         } catch (error) {

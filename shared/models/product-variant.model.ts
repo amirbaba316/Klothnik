@@ -28,7 +28,6 @@ export const ProductVariantSchema = new Schema<IProductVariant, ProductVariantMo
     {
         _id: {
             type: String,
-            required: true,
         },
         productId: {
             type: String,
