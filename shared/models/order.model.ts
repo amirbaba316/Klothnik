@@ -4,7 +4,7 @@ import { Counter } from './counter.model';
 
 const collectionName = 'Order';
 
-/** ================== Types ================== */
+/** ================== Types =================== */
 export interface IOrderTimeLineStep {
     date: Date | null;
     message: string;
